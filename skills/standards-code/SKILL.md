@@ -1,6 +1,6 @@
 ---
 name: standards-code
-description: MUST load for any code writing or refactoring; SHOULD load for code reviews. Provides modular design, functional patterns, and maintainability checklists.
+description: Use this skill when writing, refactoring, or reviewing code. Provides modular design, functional patterns, and maintainability checklists.
 license: MIT
 metadata:
   role: standards

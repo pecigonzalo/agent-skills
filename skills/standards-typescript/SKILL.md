@@ -1,6 +1,6 @@
 ---
 name: standards-typescript
-description: MUST load when writing or reviewing TypeScript; SHOULD load for TS API design. Provides idiomatic patterns, type system, naming, and Google TS Style Guide rules.
+description: Use this skill when writing or reviewing TypeScript or designing TypeScript APIs. Provides idiomatic patterns, type system, naming, and Google TS Style Guide rules.
 license: MIT
 metadata:
   role: standards

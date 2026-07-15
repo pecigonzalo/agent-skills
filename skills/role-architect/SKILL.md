@@ -1,6 +1,6 @@
 ---
 name: role-architect
-description: MUST load for system design or architectural decisions; SHOULD load for scalability analysis or large refactoring. Applies SOLID principles and design patterns.
+description: Use this skill for system design, architectural decisions, scalability analysis, or large refactoring. Applies SOLID principles and design patterns.
 license: MIT
 metadata:
   host-capabilities: Optional store tools for durable architecture decisions

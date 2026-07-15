@@ -1,6 +1,6 @@
 ---
 name: standards-go
-description: MUST load when writing or reviewing Go code; SHOULD load for Go architectural or API design decisions. Provides idiomatic Go patterns, error handling, resource management, generics, and design pattern guidance.
+description: Use this skill when writing or reviewing Go code or making Go architecture and API design decisions. Provides idiomatic Go patterns, error handling, resource management, generics, and design pattern guidance.
 license: MIT
 metadata:
   role: standards

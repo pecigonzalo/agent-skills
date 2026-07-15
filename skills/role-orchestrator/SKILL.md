@@ -1,6 +1,6 @@
 ---
 name: role-orchestrator
-description: MUST load for primary agents coordinating subagents. Provides delegation criteria, quality gates, TODO-Store linking, and communication patterns.
+description: Use this skill when a primary agent coordinates subagents. Provides delegation criteria, quality gates, TODO-Store linking, and communication patterns.
 license: MIT
 metadata:
   host-capabilities: Host-native subagent delegation and TODO tools; optional store tools

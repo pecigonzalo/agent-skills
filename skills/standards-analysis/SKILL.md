@@ -1,6 +1,6 @@
 ---
 name: standards-analysis
-description: MUST load for complex problem analysis or architectural decisions; SHOULD load for bug investigation or requirement gathering. Provides decomposition and trade-off frameworks.
+description: Use this skill for complex problem analysis, architectural decisions, bug investigation, or requirement gathering. Provides decomposition and trade-off frameworks.
 license: MIT
 metadata:
   role: standards

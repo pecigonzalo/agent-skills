@@ -1,6 +1,6 @@
 ---
 name: role-code-review
-description: MUST load for pull request or code quality reviews; SHOULD load for pre-commit self-review. Provides systematic review methodology with severity categorization.
+description: Use this skill for pull request and code quality reviews, including pre-commit self-review. Provides systematic review methodology with severity categorization.
 license: MIT
 metadata:
   role: reviewer

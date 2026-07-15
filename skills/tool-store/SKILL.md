@@ -1,6 +1,6 @@
 ---
 name: tool-store
-description: MUST load for storing/retrieving extended repository context, plans, notes, or `[store:id]` references.
+description: Use this skill when storing or retrieving extended repository context, plans, notes, or `[store:id]` references.
 license: MIT
 metadata:
   host-capabilities: Store tools providing storewrite and storeread operations

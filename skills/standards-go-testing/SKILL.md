@@ -1,6 +1,6 @@
 ---
 name: standards-go-testing
-description: MUST load when writing Go tests, benchmarks, or fuzz targets; SHOULD load for Go test reviews. Provides idiomatic Go testing patterns including table tests, subtests, testdata, fakes, benchmarks, and fuzzing.
+description: Use this skill when writing or reviewing Go tests, benchmarks, or fuzz targets. Provides idiomatic Go testing patterns including table tests, subtests, testdata, fakes, benchmarks, and fuzzing.
 license: MIT
 metadata:
   role: standards

@@ -1,6 +1,6 @@
 ---
 name: standards-observability
-description: MUST load for logging, metrics, error tracking, or performance monitoring; SHOULD load for debugging strategies or system health design. Provides structured logging, telemetry, and visibility checklists.
+description: Use this skill for logging, metrics, error tracking, performance monitoring, debugging strategies, or system health design. Provides structured logging, telemetry, and visibility checklists.
 license: MIT
 metadata:
   role: standards

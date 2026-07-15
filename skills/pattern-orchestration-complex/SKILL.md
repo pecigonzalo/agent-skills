@@ -178,7 +178,7 @@ skill(name: "tool-store")
 
 **What to store — include `prompt_drafts` for compaction-safe execution:**
 
-Since this is a complex task (3+ TODOs, >60 min), the stored plan **MUST** include `data.prompt_drafts` with:
+For a complex task (3+ TODOs, >60 min), include `data.prompt_drafts` in the stored plan with:
 - `universal_handoff_prompt`: a plain copy-paste message (e.g. `@orchestrator Load store: <id>\n\nTask: Execute the plan.`) for the user to resume execution — **not** a `Task({ ... })` wrapper, since `orchestrator`/`universal` are primary agents, not `Task()` targets
 - `todo_tasks[]`: one entry per planned step, each with `todo_content` (for `todowrite`) and `task_block` (the full delegation `Task({ ... })` targeting fast/balanced/deep/etc.)
 

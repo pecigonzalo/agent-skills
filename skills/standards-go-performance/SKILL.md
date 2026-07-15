@@ -1,6 +1,6 @@
 ---
 name: standards-go-performance
-description: MUST load when diagnosing Go performance issues or tuning GC; SHOULD load for performance reviews or allocation-sensitive code. Provides pprof/trace workflows, allocation control, GC tuning guardrails, and runtime metrics patterns.
+description: Use this skill when diagnosing Go performance issues, tuning garbage collection, reviewing performance, or working on allocation-sensitive code. Provides pprof and trace workflows, allocation control, GC tuning guardrails, and runtime metrics patterns.
 license: MIT
 metadata:
   role: standards

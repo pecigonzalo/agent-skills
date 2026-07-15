@@ -1,6 +1,6 @@
 ---
 name: role-developer
-description: MUST load for feature implementation or production code; SHOULD load for bug fixes with testing. Follows pragmatic TDD with standards skill loading guidance.
+description: Use this skill when implementing features or production code, or when fixing bugs with tests. Follows pragmatic TDD with standards skill loading guidance.
 license: MIT
 metadata:
   role: developer
@@ -13,7 +13,7 @@ metadata:
 
 **Development Flow**: Implement → Test → Verify → Commit
 
-**MUST load standards skills** before starting:
+**Load the relevant standards skills** before starting:
 - `standards-code` - Always load for any code implementation
 - `standards-testing` - Load when writing tests
 - `standards-security` - Load for auth, data handling, or external APIs
@@ -29,7 +29,7 @@ metadata:
 
 #### Step 1: Load Required Standards Skills
 
-**MANDATORY: Always load relevant standards before starting**
+**Load the relevant standards before starting.**
 
 **For ALL code implementation:**
 ```
@@ -156,7 +156,7 @@ Apply principles from `standards-security` skill when handling:
 - Authentication issues → Proper session handling
 - Sensitive data exposure → Encrypt, don't log
 
-**If security-sensitive code → MUST load `standards-security` skill**
+**For security-sensitive code, load the `standards-security` skill.**
 
 ---
 

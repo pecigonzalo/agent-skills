@@ -1,6 +1,6 @@
 ---
 name: standards-go-concurrency
-description: MUST load when writing goroutines, channels, or sync primitives in Go; SHOULD load for concurrency code reviews. Provides safe concurrency patterns, leak prevention, and race-detection checklists.
+description: Use this skill when writing goroutines, channels, or synchronization primitives in Go, or when reviewing concurrent Go code. Provides safe concurrency patterns, leak prevention, and race-detection checklists.
 license: MIT
 metadata:
   role: standards
