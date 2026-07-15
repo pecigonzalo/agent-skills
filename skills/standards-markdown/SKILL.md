@@ -16,7 +16,7 @@ metadata:
 - Start every file with a single H1 that matches the filename and follow with a 1–3 sentence intro.
 - If hosting supports it, drop a `[TOC]` right after the intro before the first H2.
 - Keep heading hierarchy as H1 → H2 → H3+ and use sentence case with descriptive labels.
-- Cap prose lines at 80 characters unless a link, code, table, or heading forces a longer line.
+- Keep prose as semantic paragraphs and let the editor or renderer wrap it; do not insert fixed-length line breaks.
 - Avoid trailing whitespace and use `\` sparingly for intentional breaks.
 - Prefer lazy numbering (`1.`) for long lists; indent nested items by four spaces.
 - Use backticks for inline code, escape Markdowny text, and wrap blocks in fenced code with language tags.
@@ -49,13 +49,13 @@ This file captures the preferred heading, list, and code styles.
 ...
 
 ## See also
-- [standards-documentation](../standards-documentation/SKILL.md)
+- Load `standards-documentation` for documentation content conventions.
 ```
 
-## Character limits & whitespace
+## Paragraphs and whitespace
 
-- **Prose limit**: Wrap sentences at ~80 characters to aid reviewers and diffs.
-- **Exceptions**: Links, tables, headings, and code blocks may extend beyond 80 chars.
+- **Semantic paragraphs**: Do not hard-wrap prose at a fixed column. Let the editor or renderer handle visual wrapping.
+- **Structural breaks**: Add line breaks only when Markdown structure or meaning requires them.
 - **Trailing whitespace**: Never leave trailing spaces; they break Markdown and diff cleanliness.
 - **Intentional breaks**: Use a single trailing backslash `\` where a literal line break is required (sparingly).
 
@@ -170,7 +170,7 @@ See the [style guide][style] for details.
 
 - [ ] Does the file start with a single H1 that matches the filename and include a brief intro?
 - [ ] Is the rest of the document built with ATX headings that follow sentence case and avoid generic duplicates?
-- [ ] Are prose lines wrapped near 80 characters with no trailing whitespace or stray line breaks?
+- [ ] Does prose use semantic paragraphs without fixed-length wrapping, trailing whitespace, or stray line breaks?
 - [ ] Do lists use lazy numbering when they may change and proper indentation for nested items?
 - [ ] Are code snippets fenced with language tags and properly indented inside lists?
 - [ ] Are links descriptive, using reference style definitions where helpful, and pointing to explicit paths?

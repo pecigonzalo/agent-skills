@@ -3,6 +3,7 @@ name: role-architect
 description: MUST load for system design or architectural decisions; SHOULD load for scalability analysis or large refactoring. Applies SOLID principles and design patterns.
 license: MIT
 metadata:
+  host-capabilities: Optional store tools for durable architecture decisions
   role: architect
   focus: structure
 ---

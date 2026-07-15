@@ -3,6 +3,7 @@ name: pattern-orchestration-complex
 description: Use this skill when a task has at least two complexity indicators, such as affecting 4+ files, requiring more than 60 minutes, spanning sequential phases, or involving architectural risk. Do not use it for simple tasks. Executes planning, execution, verification, and cleanup.
 license: MIT
 metadata:
+  host-capabilities: Host-native subagent delegation; optional store and TODO tools
   role: coordinator
   focus: complex-execution
 ---

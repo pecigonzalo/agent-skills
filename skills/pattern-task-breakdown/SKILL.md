@@ -3,6 +3,7 @@ name: pattern-task-breakdown
 description: MUST load when planning complex work or user requests detailed plan; SHOULD load for unclear approaches. Decomposes into sequential subtasks with dependencies and estimates.
 license: MIT
 metadata:
+  host-capabilities: Optional host-native subagent delegation and store tools
   role: planner
   focus: decomposition
 ---
@@ -18,6 +19,8 @@ metadata:
 **Best Practices**: Keep tasks small (1-2h), make dependencies clear, include verification, be realistic with estimates
 
 ## Storing plans for later execution
+
+In Pi, translate the OpenCode-style `Task` blocks below to the native `task` tool's `steps` schema, using only the agents and effort presets exposed by the active session.
 
 Use this section only when the host provides compatible store tools. If it does not, retain the complete plan in TODO descriptions or the conversation and omit `storewrite`, `storeread`, `[store:<id>]`, and stored prompt drafts.
 

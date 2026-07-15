@@ -3,9 +3,12 @@ name: tool-store
 description: MUST load for storing/retrieving extended repository context, plans, notes, or `[store:id]` references.
 license: MIT
 metadata:
+  host-capabilities: Store tools providing storewrite and storeread operations
   role: storage
   focus: persistent-memory
 ---
+
+Use this skill only when the host provides compatible `storewrite` and `storeread` tools. If store tools are unavailable, retain context in TODO descriptions or the conversation and omit store IDs instead of emulating persistence with repository files.
 
 **CRITICAL:** Store items are **not** auto-loaded. When you see
 `Load store: <id>` or `[store:<id>]`, call `storeread({ id: "<id>" })`
