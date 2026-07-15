@@ -2,7 +2,6 @@
 name: standards-go-performance
 description: MUST load when diagnosing Go performance issues or tuning GC; SHOULD load for performance reviews or allocation-sensitive code. Provides pprof/trace workflows, allocation control, GC tuning guardrails, and runtime metrics patterns.
 license: MIT
-compatibility: opencode
 metadata:
   role: standards
   domain: go-performance
@@ -462,24 +461,7 @@ gc 14 @12.345s 2%: 0.1+2.1+0.3 ms clock, 0.8+1.5/2.0/0.1+2.4 ms cpu, 512->512->2
 
 ## Pattern 7: Profile-Guided Optimization (PGO)
 
-Feed a real production CPU profile back into the compiler to enable inlining and de-virtualization decisions that static analysis cannot make.
-
-**When:** Service has been running in production long enough to have a representative CPU profile, and further micro-optimizations have been exhausted.
-
-**How:**
-
-1. Collect representative CPU profiles from real traffic.
-2. Build with PGO (`default.pgo` or explicit `-pgo` flag).
-3. Confirm impact with `benchstat`.
-
-**Pitfalls:**
-- A profile from an atypical workload (e.g., load test, not real traffic) may optimize the wrong paths.
-- PGO improves only what the compiler can do differently — it does not replace algorithmic improvements.
-- The `default.pgo` file should be committed to source control and refreshed periodically as workload patterns change.
-
-**Verify:** `go build -pgo=auto` succeeds; `benchstat` shows statistically significant improvement (typical: 5–15%); binary size may increase slightly due to more aggressive inlining.
-
----
+Read [the PGO guide](references/profile-guided-optimization.md) only after representative profiles exist and measured hotspots remain.
 
 ## Skill Loading Triggers
 

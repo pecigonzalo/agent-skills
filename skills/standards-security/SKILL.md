@@ -1,8 +1,7 @@
 ---
 name: standards-security
-description: MUST load for auth, user input, or sensitive data handling; SHOULD load for security reviews or API design. Provides OWASP Top 10 and secure coding checklists.
+description: Use this skill when designing or implementing authentication, authorization, untrusted input handling, APIs, secrets, or sensitive data flows. It provides secure coding controls and checklists; use role-security-auditor for a dedicated vulnerability assessment and severity report.
 license: MIT
-compatibility: opencode
 metadata:
   role: standards
   domain: security

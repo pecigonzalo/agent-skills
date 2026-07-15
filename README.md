@@ -1,8 +1,6 @@
 # Agent Skills
 
-The future canonical collection of reusable [Agent Skills][agent-skills] for Pi,
-OpenCode, and other compatible agents. The initial migration from the `pi-config`
-and `opencode-config` repositories is in progress.
+The future canonical collection of reusable [Agent Skills][agent-skills] for Pi, OpenCode, and other compatible agents. The initial migration from the `pi-config` and `opencode-config` repositories is in progress.
 
 ## Repository layout
 
@@ -18,9 +16,7 @@ skills/
     └── evals/       # Optional, realistic evaluation cases
 ```
 
-`SKILL.md` contains required YAML frontmatter and the instructions loaded when an
-agent activates the skill. Supporting files stay inside the package so it can be
-moved or linked without breaking relative references.
+`SKILL.md` contains required YAML frontmatter and the instructions loaded when an agent activates the skill. Supporting files stay inside the package so it can be moved or linked without breaking relative references.
 
 ## Design principles
 
@@ -35,18 +31,11 @@ moved or linked without breaking relative references.
 
 ## Client support
 
-Pi implements the Agent Skills standard and recursively discovers packages
-containing `SKILL.md` within its configured skill locations. OpenCode skills use
-the same package structure. Some skills
-may remain client-specific when they require host tools or APIs that have no
-portable equivalent.
+Pi implements the Agent Skills standard and recursively discovers packages containing `SKILL.md` within its configured skill locations. OpenCode skills use the same package structure. Some skills may remain client-specific when they require host tools or APIs that have no portable equivalent.
 
-Install skills by linking individual package directories into each client's native
-skills directory. Do not replace an entire client skills directory: per-skill links
-preserve unmanaged skills and make collisions and rollback easier to handle.
+Install skills by linking individual package directories into each client's native skills directory. Do not replace an entire client skills directory: per-skill links preserve unmanaged skills and make collisions and rollback easier to handle.
 
-Detailed cutover instructions will be added after the migrated collection passes
-repository validation and client smoke tests.
+Detailed cutover instructions will be added after the migrated collection passes repository validation and client smoke tests.
 
 ## Contributing
 
@@ -59,8 +48,7 @@ Before adding or changing a skill:
    when behavior changes materially.
 5. Update documentation in the same change as the skill.
 
-The repository will provide a validation command after the initial migration.
-Until then, use the official `skills-ref` validator where available:
+The repository will provide a validation command after the initial migration. Until then, use the official `skills-ref` validator where available:
 
 ```bash
 skills-ref validate skills/<skill-name>

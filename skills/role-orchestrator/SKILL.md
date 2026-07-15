@@ -2,13 +2,16 @@
 name: role-orchestrator
 description: MUST load for primary agents coordinating subagents. Provides delegation criteria, quality gates, TODO-Store linking, and communication patterns.
 license: MIT
-compatibility: opencode
 metadata:
   role: coordinator
   focus: orchestration
 ---
 
 **Provides:** Subagent selection criteria, delegation format, quality gates, TODO-Store linking, and communication patterns for orchestrating agents.
+
+## Host tool mapping
+
+Before delegating in Pi, read [the Pi tool mapping](references/pi-tools.md) and use its native `task` and `todo` forms instead of the OpenCode-style examples below. If store tools are unavailable, omit store calls and preserve complete context in TODO descriptions or the conversation. Do not create substitute repository files.
 
 ## Quick Reference
 
@@ -256,6 +259,8 @@ Retry inline: re-delegate with enhanced guidance (attempt 1), escalate to a more
 
 ## TODO-Store Linking
 
+Use this section only when the host provides `storewrite` and `storeread`. Without store tools, put the complete requirements and acceptance criteria in the host's TODO descriptions or retain them in the conversation.
+
 ### When to Use
 
 Use TODO-Store linking for:
@@ -472,24 +477,3 @@ Before EVERY action, verify:
 - [ ] For Explorer delegations: Does the prompt ask for summary + paths + line ranges only — **not full file contents**?
 
 **If ANY unchecked → Fix before responding**
-
----
-
-## Remember
-
-**Orchestrators coordinate, they don't execute directly.**
-
-Core responsibilities:
-- Analyze and delegate appropriately
-- Load relevant skills for subagents
-- Review ALL outputs
-- Enforce quality gates
-- Track progress with TODOs
-- Communicate clearly with user
-
-What NOT to do:
-- Write code directly (delegate instead)
-- Skip quality reviews
-- Accept substandard output
-- Proceed without loading store items
-- Forget to update TODOs

@@ -1,8 +1,7 @@
 ---
 name: standards-testing
-description: MUST load when writing unit/integration/E2E tests; SHOULD load for test reviews or debugging. Provides AAA pattern, coverage goals, and testing checklists.
+description: Use this skill when writing or reviewing unit, integration, or end-to-end tests and applying test implementation conventions such as AAA, isolation, and behavior-focused assertions. Use role-qa-engineer for broader strategy, coverage planning, and edge-case analysis.
 license: MIT
-compatibility: opencode
 metadata:
   role: standards
   domain: testing

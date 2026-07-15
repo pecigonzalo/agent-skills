@@ -1,7 +1,6 @@
 # Repository instructions
 
-This repository is the canonical source for reusable Agent Skills shared across Pi,
-OpenCode, and compatible agent harnesses.
+This repository is the canonical source for reusable Agent Skills shared across Pi, OpenCode, and compatible agent harnesses.
 
 ## Scope
 
@@ -14,8 +13,7 @@ OpenCode, and compatible agent harnesses.
 
 ## Skill structure
 
-Every `SKILL.md` must contain YAML frontmatter followed by Markdown instructions.
-Follow these rules:
+Every `SKILL.md` must contain YAML frontmatter followed by Markdown instructions. Follow these rules:
 
 - `name` is required, uses lowercase letters, numbers, and hyphens, is at most 64
   characters, has no leading, trailing, or consecutive hyphens, and exactly matches
@@ -94,8 +92,7 @@ Before finalizing a skill change, verify:
 - Large skills use progressive disclosure deliberately.
 - Existing evaluations pass, and new behavior has realistic coverage when useful.
 
-Use the repository task runner or validation script once present. Until then, use
-`skills-ref validate skills/<skill-name>` where available.
+Use the repository task runner or validation script once present. Until then, use `skills-ref validate skills/<skill-name>` where available.
 
 ## Workflow
 
@@ -107,5 +104,4 @@ For migrations and broad refactors:
 4. Commit it as a working state with a behavior-based conventional commit.
 5. Continue only after the phase commit succeeds.
 
-Do not create standalone summary or planning files unless the user requests them.
-Keep README and repository instructions current instead.
+Do not create standalone summary or planning files unless the user requests them. Keep README and repository instructions current instead.

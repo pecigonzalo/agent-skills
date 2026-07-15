@@ -1,8 +1,7 @@
 ---
 name: standards-documentation
-description: MUST load when writing READMEs or API docs; SHOULD load for code comments or doc reviews. Provides templates and clarity principles.
+description: Use this skill when writing or reviewing READMEs, API references, setup guides, and code comments that need concise documentation conventions and templates. Use role-technical-writer instead when the task requires broader information architecture or audience strategy.
 license: MIT
-compatibility: opencode
 metadata:
   role: standards
   domain: documentation

@@ -1,8 +1,7 @@
 ---
 name: standards-markdown
-description: MUST load when writing or reviewing Markdown files; SHOULD load for docs, READMEs, or content reviews. Provides Google style guide rules, formatting checklists, and common pitfall guidance.
+description: Use this skill when writing or reviewing Markdown syntax, headings, lists, links, code fences, tables, or layout. Pair it with documentation guidance when content structure or audience needs also matter.
 license: MIT
-compatibility: opencode
 metadata:
   role: standards
   domain: markdown
@@ -140,10 +139,6 @@ See the [style guide][style] for details.
 - Use images sparingly—only when they add value that prose cannot capture, such as annotated screenshots or diagrams.
 - Always supply meaningful alt text that describes the image’s purpose.
 - Prefer hosted images that remain stable; avoid broken links or temporary attachments.
-
-```markdown
-![Screenshot showing the Markdown editor toolbar](assets/editor-toolbar.png)
-```
 
 ## Tables
 

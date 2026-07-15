@@ -2,7 +2,6 @@
 name: role-developer
 description: MUST load for feature implementation or production code; SHOULD load for bug fixes with testing. Follows pragmatic TDD with standards skill loading guidance.
 license: MIT
-compatibility: opencode
 metadata:
   role: developer
   focus: implementation
@@ -59,12 +58,13 @@ skill(name: "standards-testing")
 skill(name: "standards-security")
 ```
 
-**When working with complex features or stored specifications:**
+**When working with complex features or stored specifications and the host provides store tools:**
+
 ```
 skill(name: "tool-store")
 ```
 
-Provides TODO-Store linking pattern (`[store:id]` syntax), how to create/retrieve store items, and examples for storing specs and decisions.
+This provides TODO-Store linking, retrieval, and persistence patterns. If store tools are unavailable, keep the requirements in TODO descriptions or the conversation and omit `[store:id]` references.
 
 #### Step 2: Understand Requirements
 

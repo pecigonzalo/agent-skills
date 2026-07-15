@@ -2,7 +2,6 @@
 name: role-architect
 description: MUST load for system design or architectural decisions; SHOULD load for scalability analysis or large refactoring. Applies SOLID principles and design patterns.
 license: MIT
-compatibility: opencode
 metadata:
   role: architect
   focus: structure
@@ -271,7 +270,9 @@ Database
 - [ ] Document decision and rationale
 - [ ] Consider reversibility (can we change later?)
 
-### 5. Document Decision in Store-Memory (Recommended)
+### 5. Persist decisions when durable storage is available
+
+Use this section only when the host provides compatible store tools. Otherwise, record the rationale in the user-requested project documentation or retain it in TODO descriptions or the conversation; do not create an ADR file unless requested.
 
 **For architectural decisions that should survive sessions and be discoverable long-term:**
 

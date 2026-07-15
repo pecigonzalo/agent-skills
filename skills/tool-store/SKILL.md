@@ -2,7 +2,6 @@
 name: tool-store
 description: MUST load for storing/retrieving extended repository context, plans, notes, or `[store:id]` references.
 license: MIT
-compatibility: opencode
 metadata:
   role: storage
   focus: persistent-memory

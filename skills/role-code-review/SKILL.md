@@ -2,7 +2,6 @@
 name: role-code-review
 description: MUST load for pull request or code quality reviews; SHOULD load for pre-commit self-review. Provides systematic review methodology with severity categorization.
 license: MIT
-compatibility: opencode
 metadata:
   role: reviewer
   focus: quality-assurance

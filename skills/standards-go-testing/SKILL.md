@@ -2,7 +2,6 @@
 name: standards-go-testing
 description: MUST load when writing Go tests, benchmarks, or fuzz targets; SHOULD load for Go test reviews. Provides idiomatic Go testing patterns including table tests, subtests, testdata, fakes, benchmarks, and fuzzing.
 license: MIT
-compatibility: opencode
 metadata:
   role: standards
   domain: go-testing

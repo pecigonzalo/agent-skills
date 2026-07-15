@@ -1,7 +1,7 @@
 ---
 name: mcp
-description: Discover, configure, and call MCP (Model Context Protocol) servers. Use this when interacting with MCP tools/resources, inspecting schemas, authenticating MCP servers, trying ad-hoc MCP endpoints, or generating typed MCP clients/CLIs.
-allowed-tools: TypeScript, Bash(bunx mcporter:*), Bash(npx -y mcporter:*), Read, Grep
+description: Discover, configure, and call MCP (Model Context Protocol) servers. Use this when interacting with MCP tools or resources in Pi, inspecting schemas, authenticating servers, trying ad-hoc endpoints, or generating typed MCP clients and CLIs.
+allowed-tools: TypeScript Bash(bunx mcporter:*) Bash(npx -y mcporter:*) Read Grep
 ---
 
 # MCP

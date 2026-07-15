@@ -2,7 +2,6 @@
 name: pattern-task-breakdown
 description: MUST load when planning complex work or user requests detailed plan; SHOULD load for unclear approaches. Decomposes into sequential subtasks with dependencies and estimates.
 license: MIT
-compatibility: opencode
 metadata:
   role: planner
   focus: decomposition
@@ -19,6 +18,8 @@ metadata:
 **Best Practices**: Keep tasks small (1-2h), make dependencies clear, include verification, be realistic with estimates
 
 ## Storing plans for later execution
+
+Use this section only when the host provides compatible store tools. If it does not, retain the complete plan in TODO descriptions or the conversation and omit `storewrite`, `storeread`, `[store:<id>]`, and stored prompt drafts.
 
 If the plan will be stored and later resumed, this skill defines the planning
 shape; `tool-store` only explains the storage tool itself.

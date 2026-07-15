@@ -2,7 +2,6 @@
 name: standards-code
 description: MUST load for any code writing or refactoring; SHOULD load for code reviews. Provides modular design, functional patterns, and maintainability checklists.
 license: MIT
-compatibility: opencode
 metadata:
   role: standards
   domain: code-quality
