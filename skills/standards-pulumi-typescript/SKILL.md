@@ -1,9 +1,9 @@
 ---
-name: pulumi-typescript
+name: standards-pulumi-typescript
 description: Design, write, refactor, or review maintainable Pulumi programs and ComponentResource abstractions in TypeScript. Use for Pulumi TypeScript interfaces, generated resource Args, Input and Output handling, components, project and stack structure, resource identity, secrets, testing, or safe infrastructure refactors.
 ---
 
-# Pulumi TypeScript
+# Pulumi TypeScript Standards
 
 Write Pulumi TypeScript as a readable model of infrastructure. Keep composition roots small, domain boundaries explicit, resource identities stable, and abstractions no stronger than necessary.
 
