@@ -1,6 +1,6 @@
 # Agent Skills
 
-The future canonical collection of reusable [Agent Skills][agent-skills] for Pi, OpenCode, and other compatible agents. The initial migration from the `pi-config` and `opencode-config` repositories is in progress.
+The canonical collection of reusable [Agent Skills][agent-skills] for Pi, OpenCode, and other compatible agents. It consolidates skills previously maintained in the `pi-config` and `opencode-config` repositories.
 
 ## Repository layout
 
@@ -35,7 +35,67 @@ Pi implements the Agent Skills standard and recursively discovers packages conta
 
 Install skills by linking individual package directories into each client's native skills directory. Do not replace an entire client skills directory: per-skill links preserve unmanaged skills and make collisions and rollback easier to handle.
 
-Detailed cutover instructions will be added after the migrated collection passes repository validation and client smoke tests.
+## Safe cutover
+
+Validate the canonical collection before changing either client:
+
+```bash
+bun install --frozen-lockfile
+bun run validate
+```
+
+Choose one low-risk skill as a canary. Before linking it, inspect the destination and stop if it is a real directory, file, or unexpected symlink:
+
+```bash
+skill=standards-analysis
+repo=$(git rev-parse --show-toplevel)
+
+if [ ! -f "$repo/skills/$skill/SKILL.md" ]; then
+  printf 'Run this from the agent-skills checkout: %s\n' "$repo" >&2
+  exit 1
+fi
+
+for target in "$HOME/.pi/agent/skills/$skill" "$HOME/.config/opencode/skills/$skill"; do
+  if [ -e "$target" ] || [ -L "$target" ]; then
+    printf 'Destination already exists: %s\n' "$target" >&2
+    exit 1
+  fi
+done
+```
+
+Create only the client link you are testing. For Pi:
+
+```bash
+mkdir -p "$HOME/.pi/agent/skills"
+ln -s "$repo/skills/$skill" "$HOME/.pi/agent/skills/$skill"
+```
+
+Restart Pi, confirm the canary appears exactly once, and force-load it with `/skill:standards-analysis` on a representative task. You can instead start Pi with `--skill "$repo/skills/standards-analysis"` for a test that does not change discovery paths.
+
+After the Pi canary passes or has been rolled back, repeat the collision check and create the OpenCode canary:
+
+```bash
+mkdir -p "$HOME/.config/opencode/skills"
+ln -s "$repo/skills/$skill" "$HOME/.config/opencode/skills/$skill"
+```
+
+Restart OpenCode, confirm `standards-analysis` appears once in its available skills, and use a complex analysis prompt that should activate it. Verify the session trace shows that OpenCode loaded the linked `SKILL.md` before linking the remaining packages.
+
+For rollback, remove only a symlink whose stored target exactly matches the package path created above:
+
+```bash
+target="$HOME/.pi/agent/skills/$skill"
+expected="$repo/skills/$skill"
+
+if [ -L "$target" ] && [ "$(readlink "$target")" = "$expected" ]; then
+  rm "$target"
+else
+  printf 'Refusing to remove unmanaged destination: %s\n' "$target" >&2
+  exit 1
+fi
+```
+
+Before cutover, run `git status --short` in both `~/.pi` and `~/.config/opencode`. Preserve every uncommitted change by committing it to the appropriate repository or by making an explicit backup; do not use a destructive clean or reset. Do not remove the source packages until both clients have loaded the complete expected set without missing skills or duplicate-name warnings. Remove Pi's configured dependency on `~/.config/opencode/skills` only after equivalent Pi-native links are active and verified. Keep the pre-cutover commits and backups available until rollback has been exercised.
 
 ## Contributing
 
@@ -44,11 +104,17 @@ Before adding or changing a skill:
 1. Read [`AGENTS.md`](AGENTS.md).
 2. Keep the directory name and frontmatter `name` identical.
 3. Validate frontmatter, links, bundled resources, and compatibility claims.
-4. Test the skill on realistic tasks and compare it with an unassisted baseline
-   when behavior changes materially.
+4. Test the skill on realistic tasks and compare it with an unassisted baseline when behavior changes materially.
 5. Update documentation in the same change as the skill.
 
-The repository will provide a validation command after the initial migration. Until then, use the official `skills-ref` validator where available:
+Install the pinned development dependencies and run the repository checks:
+
+```bash
+bun install --frozen-lockfile
+bun run validate
+```
+
+The validation command type-checks the validator, runs its tests, and checks every skill's frontmatter, referenced package-local resources, size, duplicate names, and declared host capabilities. You can also run the official validator against an individual package:
 
 ```bash
 skills-ref validate skills/<skill-name>
