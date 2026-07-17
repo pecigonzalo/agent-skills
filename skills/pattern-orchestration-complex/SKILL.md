@@ -1,11 +1,7 @@
 ---
 name: pattern-orchestration-complex
 description: Use this skill when a task has at least two complexity indicators, such as affecting 4+ files, requiring more than 60 minutes, spanning sequential phases, or involving architectural risk. Do not use it for simple tasks. Executes planning, execution, verification, and cleanup.
-license: MIT
-metadata:
-  host-capabilities: Host-native subagent delegation; optional store and TODO tools
-  role: coordinator
-  focus: complex-execution
+compatibility: Requires a host with native subagent delegation (Pi's task tool or OpenCode-style Task()); store and TODO tools are optional.
 ---
 
 ## Quick Reference
@@ -61,28 +57,7 @@ metadata:
 
 ### Step 1: Delegate to Thinker for Plan
 
-**Create execution plan using pattern-task-breakdown skill:**
-
-```
-Task({
-  subagent_type: "thinker",
-  description: "Create execution plan for complex task",
-  prompt: `
-Load skills: pattern-task-breakdown, role-architect
-
-Task: Create execution plan for: {user's request}
-
-Create a structured breakdown with:
-- Phases (logical groupings of related work)
-- Tasks per phase (1-2 hour chunks, clear and actionable)
-- Dependencies (what must happen first)
-- Risks (potential issues or blockers)
-- Estimates (time for each phase)
-
-Output as markdown following pattern-task-breakdown skill format.
-  `
-})
-```
+**Create execution plan using pattern-task-breakdown skill.** Read [the plan delegation template](references/delegation-templates.md#phase-1-plan-delegation) for the exact call shape.
 
 **Thinker will return structured plan with:**
 - Overview of work
@@ -176,34 +151,19 @@ skill(name: "tool-store")
 - [ ] Multiple phases or agents involved
 - [ ] Want plan to survive session cleanup or compaction
 
-**What to store — include `prompt_drafts` for compaction-safe execution:**
+**What to store: include `prompt_drafts` for compaction-safe execution:**
 
 For a complex task (3+ TODOs, >60 min), include `data.prompt_drafts` in the stored plan with:
-- `universal_handoff_prompt`: a plain copy-paste message (e.g. `@orchestrator Load store: <id>\n\nTask: Execute the plan.`) for the user to resume execution — **not** a `Task({ ... })` wrapper, since `orchestrator`/`universal` are primary agents, not `Task()` targets
+- `universal_handoff_prompt`: a plain copy-paste message (e.g. `@orchestrator Load store: <id>\n\nTask: Execute the plan.`) for the user to resume execution: **not** a `Task({ ... })` wrapper, since `orchestrator`/`universal` are primary agents, not `Task()` targets
 - `todo_tasks[]`: one entry per planned step, each with `todo_content` (for `todowrite`) and `task_block` (the full delegation `Task({ ... })` targeting fast/balanced/deep/etc.)
 
-Minimal shape:
+Load `pattern-task-breakdown` for the exact `data.prompt_drafts` shape; see [plan persistence](references/delegation-templates.md#plan-persistence-store) for when this applies.
 
-```json
-{
-  "prompt_drafts": {
-    "universal_handoff_prompt": "@orchestrator Load store: <plan-id>\n\nTask: Execute the stored plan.",
-    "todo_tasks": [
-      {
-        "todo_title": "Step title",
-        "todo_content": "Step title [store:<plan-id>]",
-        "task_block": "Task({ ... })"
-      }
-    ]
-  }
-}
-```
-
-This ensures that if context is compacted between planning and execution, the agent can load the store item and immediately start delegating using the stored prompts — no context reconstruction needed.
+This ensures that if context is compacted between planning and execution, the agent can load the store item and immediately start delegating using the stored prompts: no context reconstruction needed.
 
 **Benefits:**
 - Plan and decisions survive session cleanup and compaction
-- Prompt drafts are always available — no reconstruction from memory
+- Prompt drafts are always available: no reconstruction from memory
 - Can be referenced via `[store:id]` syntax in TODO items
 
 ---
@@ -221,26 +181,7 @@ This ensures that if context is compacted between planning and execution, the ag
 - Balanced: Standard multi-file work
 - Deep: Complex logic, security-critical, cross-cutting changes
 
-**Delegate with context:**
-```
-Task({
-  subagent_type: "{fast|balanced|deep}",
-  description: "{5-10 word summary}",
-  prompt: `
-Load skills: {relevant domain skills/standards/patterns}
-
-Task: {specific task from plan}
-
-Requirements:
-- {requirement 1 from plan}
-- {requirement 2 from plan}
-
-Success Criteria:
-- {criterion 1 - must be verifiable}
-- {criterion 2 - must be verifiable}
-  `
-})
-```
+**Delegate with context.** Read [the task execution delegation template](references/delegation-templates.md#phase-2-task-execution-delegation) for the exact call shape.
 
 #### 2. Quality Gate Review
 
@@ -307,33 +248,7 @@ Starting Phase 2: Authentication endpoints
 
 ### Step 1: Delegate Final Verification
 
-```
-Task({
-  subagent_type: "fast",
-  description: "Final verification of completed work",
-  prompt: `
-Load skills: role-code-review, role-qa-engineer
-
-Task: Verify all work from {feature name} meets requirements
-
-Review ALL files modified in this feature.
-
-Verification Checklist:
-- [ ] All requirements from original request met
-- [ ] All acceptance criteria satisfied
-- [ ] Code follows standards (`skill:standards-code`)
-- [ ] Security best practices applied (`skill:standards-security`)
-- [ ] Tests comprehensive and passing (`skill:standards-testing`)
-- [ ] Documentation updated where needed
-- [ ] No obvious bugs or issues
-
-Success Criteria:
-- ALL checklist items verified
-- Report any issues found
-- Confirm ready for deployment or flag concerns
-  `
-})
-```
+Load `role-code-review` and `role-qa-engineer`, review every file modified in the feature against the original requirements and acceptance criteria, and confirm standards/security/test coverage. Read [the final verification delegation template](references/delegation-templates.md#phase-3-final-verification-delegation) for the exact call shape.
 
 ### Step 2: Review Verification Results
 
@@ -357,7 +272,7 @@ Success Criteria:
 
 ### Step 1: Run Final Tests
 
-**Ensure everything works end-to-end using the project's task runner** (e.g., `task test`, `make test`, or equivalent — check the repo's `Taskfile`, `Makefile`, or `package.json` scripts first):
+**Ensure everything works end-to-end using the project's task runner** (e.g., `task test`, `make test`, or equivalent: check the repo's `Taskfile`, `Makefile`, or `package.json` scripts first):
 
 - Full test suite must pass
 - Linter must pass
@@ -443,6 +358,10 @@ Summary of work:
 Read [common orchestration patterns](references/common-patterns.md) when adapting the workflow to a feature, refactor, or security-hardening project.
 
 ## Integration with Other Skills
+
+### With role-orchestrator
+- Typically loaded *from* role-orchestrator's Pattern Selection Triggers when 2+ complexity indicators are present
+- Delegation calls use the same envelope as role-orchestrator's Standard Delegation Template; load it directly if this skill is used standalone
 
 ### With pattern-task-breakdown
 - Pattern-task-breakdown creates the plan

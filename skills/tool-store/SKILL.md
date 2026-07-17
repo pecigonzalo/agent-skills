@@ -1,11 +1,7 @@
 ---
 name: tool-store
 description: Use this skill when storing or retrieving extended repository context, plans, notes, or `[store:id]` references.
-license: MIT
-metadata:
-  host-capabilities: Store tools providing storewrite and storeread operations
-  role: storage
-  focus: persistent-memory
+compatibility: Requires host-native storewrite/storepatch/storeread/storedelete tools (e.g. Pi's store bridge). Do not use where these tools are unavailable.
 ---
 
 Use this skill only when the host provides compatible `storewrite` and `storeread` tools. If store tools are unavailable, retain context in TODO descriptions or the conversation and omit store IDs instead of emulating persistence with repository files.
@@ -90,7 +86,7 @@ storewrite({
 ### `storewrite`
 
 Create a new store item. IDs are generated internally (12-char lowercase hex).
-Every call creates a new item — it never updates an existing one.
+Every call creates a new item: it never updates an existing one.
 
 **Parameters:**
 
@@ -124,7 +120,7 @@ omitted fields are preserved. Returns `found: false` when the ID does not exist.
 - `id` (required): ID of the item to update
 - `summary` (optional): New summary
 - `tags` (optional): New tags array
-- `status` (optional): New status — `"active"`, `"archived"`, or `"deprecated"`
+- `status` (optional): New status: `"active"`, `"archived"`, or `"deprecated"`
 - `data` (optional): New data payload (replaces existing)
 - `links` (optional): New links array
 

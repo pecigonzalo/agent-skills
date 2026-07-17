@@ -1,11 +1,6 @@
 ---
 name: standards-security
 description: Use this skill when designing or implementing authentication, authorization, untrusted input handling, APIs, secrets, or sensitive data flows. It provides secure coding controls and checklists; use role-security-auditor for a dedicated vulnerability assessment and severity report.
-license: MIT
-metadata:
-  role: standards
-  domain: security
-  priority: critical
 ---
 
 # Security Standards

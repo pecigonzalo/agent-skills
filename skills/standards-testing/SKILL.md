@@ -1,11 +1,6 @@
 ---
 name: standards-testing
 description: Use this skill when writing or reviewing unit, integration, or end-to-end tests and applying test implementation conventions such as AAA, isolation, and behavior-focused assertions. Use role-qa-engineer for broader strategy, coverage planning, and edge-case analysis.
-license: MIT
-metadata:
-  role: standards
-  domain: testing
-  priority: critical
 ---
 
 # Testing Standards

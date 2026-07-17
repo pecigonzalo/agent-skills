@@ -1,10 +1,6 @@
 ---
 name: role-code-review
 description: Use this skill for pull request and code quality reviews, including pre-commit self-review. Provides systematic review methodology with severity categorization.
-license: MIT
-metadata:
-  role: reviewer
-  focus: quality-assurance
 ---
 
 **Provides:** Systematic code review methodology, severity categorization, quality checklists, and feedback patterns.

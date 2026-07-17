@@ -1,10 +1,6 @@
 ---
 name: role-security-auditor
 description: Use this skill to conduct a security audit, threat-focused review, or OWASP Top 10 assessment and report vulnerabilities by severity. Use standards-security for secure implementation guidance during routine work with authentication, untrusted input, or sensitive data.
-license: MIT
-metadata:
-  role: security-expert
-  focus: security
 ---
 
 **Provides:** OWASP Top 10 vulnerability scanning, severity assessment, remediation guidance, and security compliance evaluation.

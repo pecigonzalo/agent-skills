@@ -1,11 +1,6 @@
 ---
 name: standards-go
 description: Use this skill when writing or reviewing Go code or making Go architecture and API design decisions. Provides idiomatic Go patterns, error handling, resource management, generics, and design pattern guidance.
-license: MIT
-metadata:
-  role: standards
-  domain: go
-  priority: high
 ---
 
 # Go Standards
@@ -62,7 +57,7 @@ guidance. For concurrency, testing, and performance, load dedicated subskills.
 - Use naked returns in non-trivial functions
 - Define interfaces in consumers, not implementations
 - Use bare `string`/`int` context keys
-- Use `http.NewRequest` for outbound calls that must respect a deadline — use `http.NewRequestWithContext`
+- Use `http.NewRequest` for outbound calls that must respect a deadline: use `http.NewRequestWithContext`
 
 **Key commands (only when needed):**
 
@@ -108,7 +103,7 @@ Add dependencies and abstraction only when they clearly improve correctness, sim
 ### Control Flow Idioms
 
 - **`if` with initializer**: scope short-lived variables to the block: `if err := file.Chmod(0664); err != nil { return err }`.
-- **`:=` redeclaration rule**: a variable in the *same scope* can reappear on the left of `:=` if at least one other variable is new. **Shadowing trap**: `:=` in an inner scope creates a new variable — the outer one is silently unchanged.
+- **`:=` redeclaration rule**: a variable in the *same scope* can reappear on the left of `:=` if at least one other variable is new. **Shadowing trap**: `:=` in an inner scope creates a new variable: the outer one is silently unchanged.
 - **`range` over strings iterates runes (not bytes)**: `for i, r := range s` yields Unicode code points; `i` is the byte offset.
 - **Switch**: no implicit fallthrough; expression-less switch (`switch { case cond: }`) switches on `true`; comma-separated cases share a body; use **labeled break** to exit an enclosing loop from within a switch.
 
@@ -134,10 +129,10 @@ Use raw string literals (backticks) to avoid hand-escaped strings: `` `unknown e
 - **Comment style**: Start with the name being documented; use a full sentence. Example: `// A Request represents a request to run a command.`
 - **Package comment**: Every package needs exactly one; place it in `doc.go` for large packages.
 - **Parameters / config**: Document only non-obvious behavior and edge cases.
-- **Context cancellation**: Implied — document only when behavior differs.
+- **Context cancellation**: Implied: document only when behavior differs.
 - **Concurrency**: Read-only operations are assumed safe; mutating assumed unsafe. Add a note only when ambiguous.
 - **Cleanup**: Always state when the caller must release a resource.
-- **Errors**: Document sentinel errors and custom error types — use pointer form (`*PathError`) for `errors.As` targets.
+- **Errors**: Document sentinel errors and custom error types: use pointer form (`*PathError`) for `errors.As` targets.
 - **Godoc formatting**: Blank line between paragraphs; indent code blocks by two extra spaces.
 
 ### Initialisms and Acronyms
@@ -160,7 +155,7 @@ Read [the API and type design guide](references/api-and-type-design.md) when des
 ## Project Structure
 
 ```
-cmd/myapp/main.go    # Minimal — wire dependencies and call into internal packages
+cmd/myapp/main.go    # Minimal: wire dependencies and call into internal packages
 internal/            # Private packages; cannot be imported by external modules
 pkg/                 # Public library code (optional; omit if all consumers are internal)
 api/                 # API definitions (OpenAPI specs, protobuf files)
@@ -168,7 +163,7 @@ configs/             # Configuration files
 testdata/            # Test fixtures; ignored by go build
 ```
 
-- Keep `main` packages thin — business logic belongs in `internal/`.
+- Keep `main` packages thin: business logic belongs in `internal/`.
 - Prefer `internal/` over `pkg/` unless you intentionally publish an importable API.
 - `testdata/` is the conventional home for golden files, fixtures, and fuzz corpora.
 
@@ -191,7 +186,7 @@ testdata/            # Test fixtures; ignored by go build
 - Wrap errors for context: `fmt.Errorf("open config: %w", err)`. Use `%w` (not `%v`) so callers can unwrap.
 - Check wrapped errors with `errors.Is` and `errors.As` (or `errors.AsType` if
   available in your project Go version).
-- Sentinel errors: declare as package-level vars — `var ErrFoo = errors.New("foo")` — so callers can match without string comparison.
+- Sentinel errors: declare as package-level vars (`var ErrFoo = errors.New("foo")`) so callers can match without string comparison.
 - Combine multiple errors with `errors.Join(err1, err2)` (1.20+) instead of manual concatenation.
 - **Custom error types**: define struct types when callers need structured
   fields; unwrap with `errors.As`.
@@ -211,7 +206,7 @@ Do not use magic sentinel values (`-1`, `""`, `nil`) to signal failure. Use mult
 
 ### Indent Error Flow
 
-Handle errors first and return early; do not put the normal path in an `else` branch. Avoid `if x, err := f(); err != nil { ... } else { use x }` — declare `x` separately when it lives beyond a few lines.
+Handle errors first and return early; do not put the normal path in an `else` branch. Avoid `if x, err := f(); err != nil { ... } else { use x }`: declare `x` separately when it lives beyond a few lines.
 
 ### `%v` vs `%w`
 
@@ -239,7 +234,7 @@ if err := db.QueryRow(ctx, q, id).Scan(&u); err != nil {
 
 ### init() Rules
 
-Avoid `init()` — prefer an explicit initialization function called by `main()`. When unavoidable (e.g., `database/sql` driver registration), `init()` must be: completely deterministic, free of ordering dependencies, must not read env vars or `os.Args`, and must not perform I/O.
+Avoid `init()`: prefer an explicit initialization function called by `main()`. When unavoidable (e.g., `database/sql` driver registration), `init()` must be: completely deterministic, free of ordering dependencies, must not read env vars or `os.Args`, and must not perform I/O.
 
 ### Exit and log.Fatal
 
@@ -274,10 +269,10 @@ func run() error {
 - **Always `defer cancel()`** immediately after deriving a context.
 - **Use `http.NewRequestWithContext`** (never `http.NewRequest`) so outbound requests respect the caller's deadline.
 
-**Typed context keys** — never use bare string or int as a key:
+**Typed context keys**: never use bare string or int as a key:
 
 ```go
-// Unexported type scoped to this package — impossible for other packages to collide
+// Unexported type scoped to this package: impossible for other packages to collide
 type contextKey string
 
 const (

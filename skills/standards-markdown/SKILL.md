@@ -1,10 +1,6 @@
 ---
 name: standards-markdown
 description: Use this skill when writing or reviewing Markdown syntax, headings, lists, links, code fences, tables, or layout. Pair it with documentation guidance when content structure or audience needs also matter.
-license: MIT
-metadata:
-  role: standards
-  domain: markdown
 ---
 
 # Markdown Standards
@@ -25,7 +21,7 @@ metadata:
 - Use alt text for images and add them only when they add value, ideally as screenshots.
 - Tables belong to tabular data only; fall back to lists plus subheadings if the content is prose-heavy.
 - Prefer Markdown over HTML; skip HTML tricks that hinder portability.
-- Document the minimum viable content, then iterate—better beats perfect.
+- Document the minimum viable content, then iterate: better beats perfect.
 - End with a `## See also` section for related references and resources.
 
 ---
@@ -72,7 +68,7 @@ an intentional break.
 
 - **ATX only**: Always use `#` through `######`; never underline with `===` or `---`.
 - **Spacing**: Add a blank line before and after each heading and a single space after the `#` characters.
-- **Sentence case**: Treat headings like sentences—capitalize only the first word and proper nouns unless a stylized acronym is needed.
+- **Sentence case**: Treat headings like sentences: capitalize only the first word and proper nouns unless a stylized acronym is needed.
 - **Uniqueness**: Skip generic duplicates such as `### Summary` in multiple sections; prefer `### API summary` versus `### UI summary`.
 
 ```markdown
@@ -124,7 +120,7 @@ npm install --save @scope/pkg \
 
 - Prefer **reference-style links** for long URLs or when reusing the same link in multiple spots.
 - Keep internal links explicit (no `../` jumps across directories unless unavoidable).
-- Write descriptive link titles—avoid generic text like “click here” or raw URLs as link text.
+- Write descriptive link titles: avoid generic text like “click here” or raw URLs as link text.
 - Place reference definitions either at the end of the current section or at the document’s end if shared across sections.
 - Use reference links within tables to keep cells tidy.
 
@@ -136,7 +132,7 @@ See the [style guide][style] for details.
 
 ## Images
 
-- Use images sparingly—only when they add value that prose cannot capture, such as annotated screenshots or diagrams.
+- Use images sparingly: only when they add value that prose cannot capture, such as annotated screenshots or diagrams.
 - Always supply meaningful alt text that describes the image’s purpose.
 - Prefer hosted images that remain stable; avoid broken links or temporary attachments.
 
@@ -163,7 +159,7 @@ See the [style guide][style] for details.
 ## Philosophy
 
 - **Minimum viable docs**: Small, accurate documentation trumps sprawling but stale prose.
-- **Better/Best Rule**: Fast iterations beat perfection. Reviewers should not block progress on minor style nits—mentor authors to fix them instead.
+- **Better/Best Rule**: Fast iterations beat perfection. Reviewers should not block progress on minor style nits: mentor authors to fix them instead.
 - Prioritize clarity over clever formatting; consistent patterns make future updates easier.
 
 ## Checklist

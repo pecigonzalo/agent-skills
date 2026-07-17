@@ -1,10 +1,6 @@
 ---
 name: role-developer
 description: Use this skill when implementing features or production code, or when fixing bugs with tests. Follows pragmatic TDD with standards skill loading guidance.
-license: MIT
-metadata:
-  role: developer
-  focus: implementation
 ---
 
 **Provides:** Pragmatic TDD workflow, standards skill loading guidance, implementation checklists.
@@ -105,58 +101,11 @@ This provides TODO-Store linking, retrieval, and persistence patterns. If store 
 
 ### Code Implementation Principles
 
-Apply principles from `standards-code` skill (load it first!):
-
-**Core patterns:**
-- ✅ Pure functions (predictable, testable)
-- ✅ Immutability (create new data, don't modify)
-- ✅ Small functions (< 50 lines)
-- ✅ Explicit dependencies (dependency injection)
-- ✅ Single responsibility per function/module
-
-**Avoid:**
-- ❌ Mutation and side effects
-- ❌ Deep nesting (use early returns)
-- ❌ God modules (split into focused modules)
-- ❌ Global state
-
-**Error handling:**
-- Validate at boundaries (input validation)
-- Return explicit success/error results
-- Handle errors gracefully
-- Log errors with context
-
-**Naming:**
-- Functions: verbPhrases (`getUser`, `validateEmail`)
-- Predicates: `isValid`, `hasPermission`, `canAccess`
-- Variables: descriptive, `const` by default
-- Files: `lowercase-with-dashes.js`
+`standards-code` owns the concrete patterns (pure functions, immutability, function size, dependency injection, naming, error handling). Load it before writing code. Do not implement from memory of what this skill used to say, since `standards-code` is the maintained source and may have moved on.
 
 ### Security Considerations
 
-Apply principles from `standards-security` skill when handling:
-
-**Authentication/Authorization:**
-- Never trust user input
-- Validate and sanitize all inputs
-- Use parameterized queries (prevent SQL injection)
-- Implement proper session management
-- Follow least privilege principle
-
-**Data Protection:**
-- Never log sensitive data (passwords, tokens, PII)
-- Encrypt sensitive data at rest and in transit
-- Use environment variables for secrets
-- Never commit secrets to version control
-
-**Common Vulnerabilities (OWASP Top 10):**
-- SQL Injection → Use parameterized queries
-- XSS → Escape output, sanitize input
-- CSRF → Use CSRF tokens
-- Authentication issues → Proper session handling
-- Sensitive data exposure → Encrypt, don't log
-
-**For security-sensitive code, load the `standards-security` skill.**
+`standards-security` owns the concrete controls (input validation, parameterized queries, secrets handling, OWASP Top 10 mitigations). Load it whenever you touch authentication, authorization, untrusted input, or sensitive data. Do not implement security-sensitive code from memory.
 
 ---
 
@@ -164,51 +113,12 @@ Apply principles from `standards-security` skill when handling:
 
 ### Write Comprehensive Tests
 
-Apply principles from `standards-testing` skill (load it first!):
+`standards-testing` owns the concrete conventions (AAA structure, test levels, what to test vs. skip, coverage targets by criticality). Load it before writing tests. Do not implement from memory, since coverage targets in particular are tiered by criticality there and a flat rule-of-thumb here would drift out of sync.
 
-**Test levels:**
-- **Unit tests**: Test individual functions in isolation
-- **Integration tests**: Test component interactions
-- **E2E tests**: Test full user workflows (when appropriate)
-
-**AAA Pattern:**
-```javascript
-// Arrange: Setup test data and state
-const user = { name: "John", age: 30 };
-
-// Act: Execute the function being tested
-const result = validateUser(user);
-
-// Assert: Verify the outcome
-expect(result.isValid).toBe(true);
-```
-
-**What to test:**
-- ✅ Happy path (normal case works)
-- ✅ Edge cases (empty, null, boundary values)
-- ✅ Error cases (invalid input, failures)
-- ✅ Business logic correctness
-
-**What NOT to test:**
-- ❌ Framework internals
-- ❌ Third-party library behavior
-- ❌ Trivial getters/setters
-
-**Test quality:**
-- Tests should be independent (no shared state)
-- Tests should be fast
-- Tests should be deterministic (same result every time)
-- One assertion per test (ideally)
-- Clear test names describe what's being tested
-
-### Coverage Goals
-
-**Target: 80%+ coverage for business logic**
-
-Coverage isn't everything, but:
-- Critical paths should have tests
-- Edge cases should be covered
-- Error handling should be tested
+Independent of those conventions, always:
+- Think about testability while coding, not just after
+- Write tests before declaring the work done
+- Keep tests and code in sync as both evolve
 
 **Run tests frequently:**
 ```bash
@@ -300,49 +210,6 @@ Add user authentication with JWT tokens
 - Focus on WHAT and WHY, not HOW
 
 **Commit after each completed task, not at end of day**
-
----
-
-## When to Load Which Standards
-
-### Always Load
-
-**`standards-code`**: Load for ANY code implementation
-- Provides core coding principles
-- Modular design patterns
-- Error handling guidance
-- Naming conventions
-
-### Load When Needed
-
-**`standards-testing`**: Load when writing tests
-- Test levels and patterns
-- AAA pattern
-- Coverage goals
-- What to test vs. what to skip
-
-**`standards-security`**: Load for security-sensitive code
-- Authentication/authorization
-- Input validation
-- Data protection
-- OWASP Top 10 prevention
-
-**`standards-documentation`**: Load when documenting
-- Public APIs
-- Complex algorithms
-- Architecture decisions
-- README files
-
-### Example: Implementing Authentication Feature
-
-```
-# Load multiple relevant standards
-skill(name: "standards-code")      # Core coding practices
-skill(name: "standards-security")  # Auth patterns and security
-skill(name: "standards-testing")   # Test guidance
-
-# Now implement with all relevant guidance loaded
-```
 
 ---
 

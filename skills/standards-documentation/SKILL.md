@@ -1,10 +1,6 @@
 ---
 name: standards-documentation
 description: Use this skill when writing or reviewing READMEs, API references, setup guides, and code comments that need concise documentation conventions and templates. Use role-technical-writer instead when the task requires broader information architecture or audience strategy.
-license: MIT
-metadata:
-  role: standards
-  domain: documentation
 ---
 
 # Documentation Standards

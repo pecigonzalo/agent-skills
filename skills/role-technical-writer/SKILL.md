@@ -1,10 +1,6 @@
 ---
 name: role-technical-writer
 description: Use this skill to plan, structure, or review user-facing documentation, public API guides, and technical specifications for a defined audience. Pair it with format-specific standards when writing Markdown; use standards-documentation alone for routine README or comment conventions.
-license: MIT
-metadata:
-  role: writer
-  focus: documentation
 ---
 
 **Provides:** Documentation structure templates, audience-focused writing patterns, clarity principles, and documentation standards.

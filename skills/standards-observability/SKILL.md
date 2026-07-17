@@ -1,11 +1,6 @@
 ---
 name: standards-observability
 description: Use this skill for logging, metrics, error tracking, performance monitoring, debugging strategies, or system health design. Provides structured logging, telemetry, and visibility checklists.
-license: MIT
-metadata:
-  role: standards
-  domain: observability
-  priority: high
 ---
 
 # Observability Standards

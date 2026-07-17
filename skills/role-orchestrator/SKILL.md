@@ -1,11 +1,7 @@
 ---
 name: role-orchestrator
 description: Use this skill when a primary agent coordinates subagents. Provides delegation criteria, quality gates, TODO-Store linking, and communication patterns.
-license: MIT
-metadata:
-  host-capabilities: Host-native subagent delegation and TODO tools; optional store tools
-  role: coordinator
-  focus: orchestration
+compatibility: Requires a host with native subagent delegation and TODO tools (Pi's task/todo tools or OpenCode-style Task()/todowrite); store tools are optional.
 ---
 
 **Provides:** Subagent selection criteria, delegation format, quality gates, TODO-Store linking, and communication patterns for orchestrating agents.
@@ -39,26 +35,10 @@ Before delegating in Pi, read [the Pi tool mapping](references/pi-tools.md) and 
 - Any read-only information gathering
 - Quick status checks
 
-**Explorer output:** Always ask for summary + file paths + line ranges. Do not request full file contents — if you need specific content after discovery, read the identified ranges directly or delegate to an implementation agent.
+**Explorer output:** Always ask for summary + file paths + line ranges. Do not request full file contents: if you need specific content after discovery, read the identified ranges directly or delegate to an implementation agent.
 **Explorer constraints:** Explorer is a read-only agent with bash **denied**. Do NOT include bash commands, shell scripts, or any execution instructions in explorer delegation prompts. Use only grep/glob/list/read tools. If you need shell commands run, delegate to an implementation agent instead.
 
-**Explorer delegation template:**
-```
-Task({
-  subagent_type: "explorer",
-  description: "<5-10 word discovery summary>",
-  prompt: `
-Task: <what to find/discover>
-
-Return:
-- A short summary of findings
-- Exact file paths and line ranges for every relevant location
-- Minimal excerpts only (cap ~60 lines total across all snippets)
-- Do NOT return full file contents
-- Do NOT run bash/shell commands — use only grep/glob/list/read tools
-  `
-})
-```
+Read [the Explorer delegation template](references/delegation-templates.md#explorer-delegation) for the exact call shape.
 
 ### Use Thinker When:
 - User asks "how should I...", "what's the best way..."
@@ -86,7 +66,7 @@ Return:
 - Refactoring with architectural changes
 
 ### Use Deep-L When:
-- Deep implementation requiring large context (272k) — e.g. broad-scope analysis spanning many files
+- Deep implementation requiring large context (272k): e.g. broad-scope analysis spanning many files
 
 ### Pattern Selection Triggers
 
@@ -96,7 +76,7 @@ Return:
 |-----------|--------|
 | 2+ complexity/risk/size indicators present | **Load `pattern-orchestration-complex`** and follow its 4-phase workflow |
 | Task requires multi-step breakdown or >60 min plan | **Delegate to Thinker with `pattern-task-breakdown`** |
-| Storing a plan that will produce 3+ TODOs or >60 min effort | **Store `prompt_drafts`** in plan data — see `pattern-task-breakdown` |
+| Storing a plan that will produce 3+ TODOs or >60 min effort | **Store `prompt_drafts`** in plan data: see `pattern-task-breakdown` |
 
 **Complexity indicators** (size, complexity, or risk):
 - 4+ files affected
@@ -120,32 +100,7 @@ Return:
 
 ## Delegation Format
 
-### Standard Delegation Template
-
-```
-Task({
-  subagent_type: "<explorer|fast|balanced|deep|deep-l|thinker>",
-  description: "<5-10 word summary>",
-  prompt: `
-Load skills: <skill1>, <skill2>
-Load store: <store-id-1>, <store-id-2>
-
-Task: <specific, actionable description>
-
-Context:
-- <relevant context 1>
-- <relevant context 2>
-
-Requirements:
-- <requirement 1>
-- <requirement 2>
-
-Success Criteria:
-- <criterion 1 - must be verifiable>
-- <criterion 2 - must be verifiable>
-  `
-})
-```
+Every delegation must include skills to load, requirements, and verifiable success criteria. Read [the standard delegation template](references/delegation-templates.md#standard-delegation) for the exact call shape.
 
 ### Skill Selection for Delegation
 
@@ -167,13 +122,7 @@ For tasks requiring context continuity:
 2. Pass `session_id` to subsequent delegations
 3. Subagent sees full conversation history
 
-```
-Task({
-  subagent_type: "deep",
-  session_id: extractedSessionId,  // Reuse for continuity
-  prompt: `Continue implementation...`
-})
-```
+Read [the multi-phase delegation shape](references/delegation-templates.md#multi-phase-delegation-session-continuity).
 
 ## Compaction Recovery for Subagents
 
@@ -187,30 +136,7 @@ Check for any of the following in subagent output:
 - Failure to follow previously established requirements.
 
 ### Recovery Delegation Template
-When re-delegating after compaction, use this format to restore context:
-
-```javascript
-Task({
-  subagent_type: "deep",
-  session_id: "original-session-id", // CRITICAL: Reuse session_id
-  prompt: `
-[CONTEXT RECOVERY]
-Your context was compacted. We are continuing with: <task description>
-
-Load skills: <skills>
-Load store: <store-ids> // CRITICAL: Store items must be reloaded
-
-**Progress So Far:**
-- <summarize what was completed before compaction>
-
-**Remaining Work:**
-- <specifically list what still needs to be done>
-
-Requirements & Success Criteria:
-- <restate critical requirements>
-`
-})
-```
+When re-delegating after compaction, reuse the original `session_id`, restate progress and remaining work, and force a store reload. Read [the compaction recovery template](references/delegation-templates.md#compaction-recovery-delegation) for the exact call shape.
 
 ### Best Practices for Recovery
 - **Reuse session_id**: Always pass the original `session_id` to maintain the surviving context.
@@ -235,16 +161,6 @@ After EVERY delegation, verify:
 - [ ] Store items loaded if referenced?
 
 **If ANY unchecked → Loop back with feedback**
-
-### Quality Gate Decision
-
-```
-if (all_criteria_met) {
-  proceed_to_next_step()
-} else {
-  loop_back_with_specific_feedback()
-}
-```
 
 ### Loop Back Process
 
@@ -272,52 +188,7 @@ Use TODO-Store linking for:
 
 ### Workflow
 
-**Step 1: Store detailed context**
-```javascript
-storewrite({
-  summary: "Feature X specification",
-  tags: ["feature", "spec", "todo-context"],
-  status: "active",
-  data: {
-    requirements: [...],
-    acceptance_criteria: [...],
-    technical_notes: [...],
-    // If plan is multi-step (3+ TODOs, >60 min, or multi-phase), add:
-    prompt_drafts: {
-      universal_handoff_prompt: `@orchestrator Load store: <plan-id>\n\nTask: Execute the stored plan.`,  // plain copy-paste message for user; NOT a Task() call
-      todo_tasks: [
-        {
-          todo_title: "Step title",
-          todo_content: "Step title [store:<plan-id>]",
-          task_block: `Task({ ... })`  // full delegation Task block for this step — targets fast/balanced/deep/etc.
-        }
-      ]
-    }
-  }
-})
-// Returns: { id: "store-abc-123" }
-// Replace <plan-id> placeholder with returned id before presenting to user
-```
-
-See `pattern-task-breakdown` for the canonical `prompt_drafts` shape.
-
-**Step 2: Create TODO with reference**
-```javascript
-todowrite({
-  todos: [{
-    id: "1",
-    content: "Implement feature X [store:store-abc-123]",
-    status: "pending",
-    priority: "high"
-  }]
-})
-```
-
-**Step 3: Load when working**
-```javascript
-// Parse [store:id] from TODO content
-storeread({ id: "store-abc-123" })
-```
+Store detailed context, create a TODO with a `[store:id]` reference, then load it when working. Read [the store/TODO call shapes](references/delegation-templates.md#store-and-todo-call-shapes) for the exact code. See `pattern-task-breakdown` for the canonical `prompt_drafts` shape.
 
 ### Store Loading Enforcement
 
@@ -356,19 +227,7 @@ This prevents context bloat while ensuring critical context isn't lost after com
 2. **Update immediately**: After each delegation
 3. **Read before updating**: Always check current state first
 
-```javascript
-// Read current state
-todoread()
-
-// Update after completing step
-todowrite({
-  todos: [
-    { id: "1", status: "completed", ... },
-    { id: "2", status: "in_progress", ... },
-    { id: "3", status: "pending", ... }
-  ]
-})
-```
+Read [the TODO read/write shape](references/delegation-templates.md#store-and-todo-call-shapes).
 
 ### Best Practices
 
@@ -450,7 +309,7 @@ How would you like to proceed?
 ### With pattern-orchestration-complex
 - **Load when:** 2+ complexity/risk/size indicators are present (4+ files, >60 min, cross-cutting, security-critical)
 - Provides 4-phase workflow (planning, execution, verification, cleanup)
-- Overrides simple direct-delegation approach — follow its workflow instead
+- Overrides simple direct-delegation approach: follow its workflow instead
 
 ### With pattern-task-breakdown
 - **Load when:** delegating to Thinker for any multi-step execution plan
@@ -475,6 +334,6 @@ Before EVERY action, verify:
 - [ ] Did I review output and run quality gate?
 - [ ] Did I load all referenced store items?
 - [ ] For multi-step tasks: Did I update TODO?
-- [ ] For Explorer delegations: Does the prompt ask for summary + paths + line ranges only — **not full file contents**?
+- [ ] For Explorer delegations: Does the prompt ask for summary + paths + line ranges only: **not full file contents**?
 
 **If ANY unchecked → Fix before responding**

@@ -1,10 +1,6 @@
 ---
 name: role-qa-engineer
 description: Use this skill to design a test strategy, identify edge cases and failure modes, organize comprehensive suites, or evaluate coverage risk. Use language-specific or general testing standards for the implementation details of individual tests.
-license: MIT
-metadata:
-  role: quality-assurance
-  focus: testing
 ---
 
 **Provides:** Test strategy planning, edge case identification, coverage evaluation, and test organization methodology.

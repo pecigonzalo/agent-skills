@@ -1,11 +1,6 @@
 ---
 name: standards-code
 description: Use this skill when writing, refactoring, or reviewing code. Provides modular design, functional patterns, and maintainability checklists.
-license: MIT
-metadata:
-  role: standards
-  domain: code-quality
-  priority: critical
 ---
 
 # Code Standards

@@ -14,7 +14,7 @@ Add ShellCheck to CI as a required gate.
 
 ### Command Substitution
 
-Use `$(command)` — **never backticks**:
+Use `$(command)`: **never backticks**:
 
 ```bash
 # ✅
@@ -26,7 +26,7 @@ var="`command \`command1\``"
 
 ### Tests: `[[ … ]]` vs `[ … ]`
 
-Always use `[[ … ]]` — it prevents word splitting and pathname expansion, and supports regex and pattern matching:
+Always use `[[ … ]]`: it prevents word splitting and pathname expansion, and supports regex and pattern matching:
 
 ```bash
 # ✅ Pattern match
@@ -35,7 +35,7 @@ if [[ "filename" =~ ^[[:alnum:]]+name ]]; then …; fi
 # ✅ Glob match (RHS unquoted)
 if [[ "${f}" == *.sh ]]; then …; fi
 
-# ❌ Avoid — no regex, no ==, risk of word splitting
+# ❌ Avoid: no regex, no ==, risk of word splitting
 if [ "filename" == f* ]; then …; fi
 ```
 
@@ -62,7 +62,7 @@ For numerical comparison, use `(( … ))` or `-lt`/`-gt`, not `<`/`>` inside `[[
 if (( my_var > 3 )); then …; fi
 if [[ "${my_var}" -gt 3 ]]; then …; fi
 
-# ❌ Lexicographical — 22 < 4 is true
+# ❌ Lexicographical: 22 < 4 is true
 if [[ "${my_var}" > 3 ]]; then …; fi
 ```
 
@@ -74,7 +74,7 @@ Use `./*` not `*` to avoid filenames starting with `-`:
 # ✅ Safe
 rm -v ./*
 
-# ❌ Dangerous — '-f' becomes a flag
+# ❌ Dangerous: '-f' becomes a flag
 rm -v *
 ```
 
@@ -87,20 +87,20 @@ rm -v *
 Use arrays (not strings) to store lists of arguments or elements:
 
 ```bash
-# ✅ Array — safe quoting
+# ✅ Array: safe quoting
 declare -a flags
 flags=(--foo --bar='baz')
 flags+=(--greeting="Hello ${name}")
 mybinary "${flags[@]}"
 
-# ❌ String — breaks on spaces
+# ❌ String: breaks on spaces
 flags='--foo --bar=baz'
 mybinary ${flags}
 ```
 
 Always expand arrays with `"${array[@]}"` (quoted, `@` form).
 
-Do not assign array from unquoted command substitution — whitespace splitting applies:
+Do not assign array from unquoted command substitution: whitespace splitting applies:
 
 ```bash
 # ❌ Breaks on filenames with spaces
@@ -112,7 +112,7 @@ readarray -t files < <(find /directory -maxdepth 1)
 
 ### Pipes to While
 
-Pipes create a subshell — variables set inside a `while` loop body are not visible after the pipe ends. Use process substitution or `readarray` instead:
+Pipes create a subshell: variables set inside a `while` loop body are not visible after the pipe ends. Use process substitution or `readarray` instead:
 
 ```bash
 # ❌ last_line is always 'NULL' after the loop
@@ -151,9 +151,9 @@ i=$[2 * 10]
 i=$(expr 4 + 4)
 ```
 
-> ⚠️ Avoid standalone `(( … ))` as a statement with `set -e` — `(( i++ ))` when `i=0` evaluates to 0 (false) and causes the script to exit.
+> ⚠️ Avoid standalone `(( … ))` as a statement with `set -e`: `(( i++ ))` when `i=0` evaluates to 0 (false) and causes the script to exit.
 
-Inside `$(( … ))`, the `${var}` braces are not required — the shell resolves variables directly:
+Inside `$(( … ))`, the `${var}` braces are not required: the shell resolves variables directly:
 
 ```bash
 local -i hundred=$(( 10 * 10 ))
@@ -162,13 +162,13 @@ local -i hundred=$(( 10 * 10 ))
 
 ### Aliases
 
-**Avoid aliases in scripts** — use functions instead. Functions provide a superset of alias functionality and are cleaner:
+**Avoid aliases in scripts**: use functions instead. Functions provide a superset of alias functionality and are cleaner:
 
 ```bash
-# ❌ Alias — $RANDOM evaluated once at define time
+# ❌ Alias: $RANDOM evaluated once at define time
 alias random_name="echo some_prefix_${RANDOM}"
 
-# ✅ Function — evaluated on each call, arguments work normally
+# ✅ Function: evaluated on each call, arguments work normally
 random_name() {
   echo "some_prefix_${RANDOM}"
 }

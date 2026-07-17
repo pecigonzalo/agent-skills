@@ -1,11 +1,6 @@
 ---
 name: standards-python
 description: Use this skill when writing or reviewing Python code or making Python architecture and API design decisions. Provides idiomatic Python patterns, type annotations, error handling, naming conventions, and docstring guidance based on the Google Python Style Guide.
-license: MIT
-metadata:
-  role: standards
-  domain: python
-  priority: high
 ---
 
 # Python Standards
@@ -33,16 +28,16 @@ metadata:
 
 **Don't** (❌):
 
-- Use mutable default arguments (`def f(x=[])`) — use `None` sentinel instead
+- Use mutable default arguments (`def f(x=[])`): use `None` sentinel instead
 - Use bare `except:` or catch `Exception`/`BaseException` without re-raising
-- Use `assert` for application logic — only for tests or truly optional checks
-- Use mutable global state — prefer dependency injection or module constants
+- Use `assert` for application logic: only for tests or truly optional checks
+- Use mutable global state: prefer dependency injection or module constants
 - Use `__double_leading_underscore__` dunder names for your own identifiers
-- Use `staticmethod` unless forced by an existing API — use module-level functions
-- Use `map()`/`filter()` with `lambda` — prefer generator expressions
-- Use backslash `\` for line continuation — use implicit joining inside brackets
+- Use `staticmethod` unless forced by an existing API: use module-level functions
+- Use `map()`/`filter()` with `lambda`: prefer generator expressions
+- Use backslash `\` for line continuation: use implicit joining inside brackets
 - Include type names in variable names (`id_to_name_dict`)
-- Use `typing.Text`, `typing.List`, `typing.Dict`, etc. in new code — use built-ins
+- Use `typing.Text`, `typing.List`, `typing.Dict`, etc. in new code: use built-ins
 
 **Key commands:**
 
@@ -73,8 +68,8 @@ Keep suppressions rare and always explain them inline.
 - Use `import x` for packages and modules; `from x import y` where `y` is a module.
 - Use `from x import y as z` only when `y` is ambiguous, conflicts, or inconveniently long.
 - Use `import y as z` only when `z` is a standard abbreviation (`import numpy as np`).
-- Always use the full package name — no relative imports.
-- Exemptions: `typing`, `collections.abc`, `typing_extensions` — import symbols directly.
+- Always use the full package name: no relative imports.
+- Exemptions: `typing`, `collections.abc`, `typing_extensions`: import symbols directly.
 
 Prefer explicit absolute imports; avoid relative imports in shared code.
 
@@ -114,7 +109,7 @@ Use trailing commas when the closing bracket is on its own line. This signals Bl
 - No space before a comma, semicolon, or colon.
 - No space before `(` starting an argument list or indexing.
 - No trailing whitespace.
-- Spaces around `=` for annotated defaults: `def f(x: int = 0)` — but not for unannotated: `def f(x=0)`.
+- Spaces around `=` for annotated defaults: `def f(x: int = 0)`: but not for unannotated: `def f(x=0)`.
 - Do not vertically align tokens across lines.
 
 ### Semicolons
@@ -210,7 +205,7 @@ Include a bug/issue reference, not a personal name.
 ### General Rules
 
 - Annotate all public APIs (function signatures, class attributes).
-- Use `X | None` (3.10+) over `Optional[X]`; always be explicit — no implicit `None` defaults.
+- Use `X | None` (3.10+) over `Optional[X]`; always be explicit: no implicit `None` defaults.
 - Do not annotate `self` or `cls` (except when using `Self` for return types).
 - Use `Any` when a type truly cannot be expressed; prefer `TypeVar` for generic functions.
 - Import symbols from `typing` and `collections.abc` directly.
@@ -253,7 +248,7 @@ Descriptive names unless the variable is unconstrained and private.
 
 Prefer specific exceptions and small `try` blocks; never silently catch broad exceptions.
 
-- Never use `assert` for application logic — only in tests or as truly optional checks.
+- Never use `assert` for application logic: only in tests or as truly optional checks.
 - Custom exception names end in `Error`; don't repeat the module name.
 - Use `finally` for cleanup regardless of exception outcome.
 
@@ -280,13 +275,13 @@ Prefer implicit boolean evaluation. Use `is None` / `is not None` for None check
 - Prefer f-strings for formatting; `%` operator or `.format()` are also acceptable.
 - Stay consistent with quote style (`'` or `"`) within a file.
 - Use `"""` for multi-line strings; avoid manual `+` concatenation across lines.
-- Don't use `+` to build strings in loops — use a list and `''.join()`.
+- Don't use `+` to build strings in loops: use a list and `''.join()`.
 
 Prefer f-strings and `''.join()` for loop-based string building.
 
 ### Logging
 
-Pass a pattern string and arguments separately to loggers — never an f-string as the first argument.
+Pass a pattern string and arguments separately to loggers: never an f-string as the first argument.
 
 ### Files & Resources
 
@@ -294,13 +289,13 @@ Always use `with` statements for files, sockets, and similar resources.
 
 ### Properties
 
-Use `@property` for simple attribute access with light computation. Don't use for pure get/set with no logic — make the attribute public instead. Don't use for expensive operations.
+Use `@property` for simple attribute access with light computation. Don't use for pure get/set with no logic: make the attribute public instead. Don't use for expensive operations.
 
 ### Decorators
 
-Use judiciously. Write unit tests for decorators. Avoid external dependencies (file/network/DB) in decorator code — it runs at import time.
+Use judiciously. Write unit tests for decorators. Avoid external dependencies (file/network/DB) in decorator code: it runs at import time.
 
-- Avoid `@staticmethod` — use module-level functions instead.
+- Avoid `@staticmethod`: use module-level functions instead.
 - Use `@classmethod` only for named constructors or class-specific routines.
 
 ### Lambda Functions
@@ -355,7 +350,7 @@ if __name__ == '__main__':
 
 Use getter/setter functions only when getting or setting involves meaningful computation or side effects. For simple attribute access, use a public attribute or `@property` instead.
 
-Follow naming: `get_foo()`, `set_foo()` — or `@property` for simple computed attributes.
+Follow naming: `get_foo()`, `set_foo()`: or `@property` for simple computed attributes.
 
 ---
 

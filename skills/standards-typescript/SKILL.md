@@ -1,11 +1,6 @@
 ---
 name: standards-typescript
 description: Use this skill when writing or reviewing TypeScript or designing TypeScript APIs. Provides idiomatic patterns, type system, naming, and Google TS Style Guide rules.
-license: MIT
-metadata:
-  role: standards
-  domain: typescript
-  priority: high
 ---
 
 # TypeScript Standards
@@ -53,7 +48,7 @@ metadata:
 - `with`, `eval`, `Function(...string)`
 - Wrapper object instantiation (`new String()`, `new Boolean()`, `new Number()`)
 - `debugger` in production
-- `parseInt`/`parseFloat` without radix validation — use `Number()` + `isNaN`
+- `parseInt`/`parseFloat` without radix validation: use `Number()` + `isNaN`
 - Unary `+` for string-to-number coercion
 
 **Key commands:**
@@ -78,7 +73,7 @@ File order (blank line between each section):
 3. Imports
 4. Implementation
 
-- UTF-8 encoding; use actual Unicode characters — not escape sequences — for printable chars (e.g., `const pi = 'π'`, not `'\u03C0'`).
+- UTF-8 encoding; use actual Unicode characters (not escape sequences) for printable chars (e.g., `const pi = 'π'`, not `'\u03C0'`).
 
 Keep file structure simple and consistent; avoid boilerplate comments/examples unless they add non-obvious value.
 
@@ -91,16 +86,16 @@ Keep file structure simple and consistent; avoid boilerplate comments/examples u
 - Use ES module `import`/`export`; **never** `require()`, CommonJS patterns, `namespace`, or `/// <reference>`.
 - **Named imports** for frequently used symbols; **namespace imports** (`import * as foo`) for large APIs where many symbols are used.
 - **Relative paths** for project-internal code (`./foo`, `../bar`); module paths for packages.
-- `import type {Foo}` for type-only imports — erased at compile time, avoids circular deps.
+- `import type {Foo}` for type-only imports: erased at compile time, avoids circular deps.
 
 Prefer concise imports: named by default, namespace for large APIs, and `import type` for type-only symbols.
 
 ### Exports
 
-- **Named exports only** — no default exports.
+- **Named exports only**: no default exports.
 - `export const` not `export let` (mutable named exports are banned).
 - `export type {Foo}` for type re-exports.
-- No container classes with only static methods — use module-level named exports instead.
+- No container classes with only static methods: use module-level named exports instead.
 
 Named exports only. Avoid default exports, mutable exports, and static-only container classes.
 
@@ -118,7 +113,7 @@ Keep declarations simple: `const` by default, `let` when reassigned, never `var`
 
 ## Arrays & Objects
 
-- Never `new Array()` / `new Object()` — use literals (`[]`, `{}`).
+- Never `new Array()` / `new Object()`: use literals (`[]`, `{}`).
 - Prefer spread for shallow copy/merge.
 - Use `for...of` for arrays.
 - Use `Object.keys/values/entries` for object iteration.
@@ -129,11 +124,11 @@ Keep declarations simple: `const` by default, `let` when reassigned, never `var`
 
 ## Classes
 
-- Use TypeScript `private` keyword — **no `#private` fields**.
+- Use TypeScript `private` keyword: **no `#private` fields**.
 - Mark non-reassigned properties `readonly`.
 - Use parameter properties: `constructor(private readonly svc: UserService) {}`.
 - Initialize fields at declaration, not in the constructor body.
-- Getters must be pure — no side effects, no observable state changes.
+- Getters must be pure: no side effects, no observable state changes.
 - **Never** use the `public` modifier unless it's a non-readonly public parameter property.
 - **No `prototype` manipulation.**
 - No trailing semicolons after class declarations; blank lines between method declarations.
@@ -148,7 +143,7 @@ Use TS-native class features (`private`, `readonly`, parameter properties); avoi
 - **Prefer arrow functions** for callbacks and inline functions; never named function expressions (use arrow instead).
 - Arrow function body: `{ }` block when return value is unused; concise body when return value is used.
 - Use rest params instead of `arguments`; spread instead of `Function.apply`.
-- **Never `bind()` in event listener registration** — use arrow function properties for stable uninstall references.
+- **Never `bind()` in event listener registration**: use arrow function properties for stable uninstall references.
 - **Never use `this` outside class methods, constructors, or arrow functions.**
 
 Prefer function declarations for top-level APIs and arrow functions for callbacks. Avoid `bind()` in event registration.
@@ -160,8 +155,8 @@ Prefer function declarations for top-level APIs and arrow functions for callback
 - Always use braces `{}` for control flow blocks (exception: single-line `if` on one line is acceptable).
 - `===` / `!==`; use `== null` only to check both `null` and `undefined` together.
 - `switch` must have a `default` case (last); no fallthrough in non-empty cases.
-- `throw new Error(...)` — never throw strings or plain objects; only `Error` subclasses.
-- `catch (e: unknown)` — assert `e instanceof Error` before accessing properties.
+- `throw new Error(...)`: never throw strings or plain objects; only `Error` subclasses.
+- `catch (e: unknown)`: assert `e instanceof Error` before accessing properties.
 - Empty catch blocks require an explanatory comment.
 - Type assertions: `as Foo` not `<Foo>`.
 
@@ -177,14 +172,14 @@ When a double assertion is unavoidable, use `unknown` as the intermediate:
 
 ### Inference & Annotations
 
-- **Rely on type inference** — don't annotate trivially-inferred types.
+- **Rely on type inference**: don't annotate trivially-inferred types.
 - **Annotate** when the type is non-obvious: complex async expressions, empty generics, public API return types.
 
 Rely on inference for obvious locals; annotate non-obvious boundaries and public API returns.
 
 ### `unknown` vs `any`
 
-- **Avoid `any`** — use `unknown` and narrow explicitly.
+- **Avoid `any`**: use `unknown` and narrow explicitly.
 - Never use `object` (use `{}`, a specific type, or `Record<string, unknown>`).
 
 Prefer `unknown` over `any`; narrow with type guards before use.
@@ -193,7 +188,7 @@ Prefer `unknown` over `any`; narrow with type guards before use.
 
 - Use **interfaces** for structural/object types.
 - Use **type aliases** for unions, intersections, and mapped types.
-- Never use a `class` purely as a structural type — use an interface.
+- Never use a `class` purely as a structural type: use an interface.
 
 Use `interface` for structural object shapes and `type` aliases for unions/mapped/intersection types.
 
@@ -206,7 +201,7 @@ Prefer optional `?` for parameters/fields instead of explicit `| undefined` unio
 
 ### Enums
 
-- Use plain `enum` — `const enum` is **banned**.
+- Use plain `enum`: `const enum` is **banned**.
 - Use enums for small, stable domain vocabularies such as persisted identifiers,
   state names, and resource categories.
 - Prefer a string union for local or ad-hoc values when it is clearer.
@@ -266,7 +261,7 @@ Key naming rules: no `I` prefix for interfaces, acronyms as words (`httpUrl`), a
 - `/** @fileoverview ... */` for file-level documentation.
 - `@param` and `@return` only when they add information not in the type signature.
 - `//` for implementation notes; `/* */` is not used for JSDoc-style comments.
-- Comment *why*, not *what* — code should be self-documenting for the "what".
+- Comment *why*, not *what*: code should be self-documenting for the "what".
 
 Use JSDoc for public APIs and comments for non-obvious *why* decisions.
 
@@ -291,7 +286,7 @@ Let Prettier enforce formatting; avoid hand-formatting conventions beyond config
 
 ## Disallowed Features
 
-Hard bans — **never use these:**
+Hard bans: **never use these:**
 
 Keep this list short and strict: `var`, default exports, `export let`, `#private`, `const enum`, wrapper objects, `eval`/`Function`, `debugger`, `any` (except strict interop), and `for...in` over arrays.
 
@@ -300,10 +295,10 @@ Keep this list short and strict: `var`, default exports, `export let`, `#private
 ## Decorators
 
 - Only use framework-provided decorators (e.g., Angular `@Component`, Polymer `@property`).
-- **Do not define new decorators** in application code — the decorator proposal has been unstable.
+- **Do not define new decorators** in application code: the decorator proposal has been unstable.
 
 ```typescript
-// ✅ Framework decorator — acceptable
+// ✅ Framework decorator: acceptable
 @Component({selector: 'app-root', template: '<h1>Hello</h1>'})
 class AppComponent {}
 

@@ -1,10 +1,6 @@
 ---
 name: standards-analysis
 description: Use this skill for complex problem analysis, architectural decisions, bug investigation, or requirement gathering. Provides decomposition and trade-off frameworks.
-license: MIT
-metadata:
-  role: standards
-  domain: analysis
 ---
 
 # Analysis Standards

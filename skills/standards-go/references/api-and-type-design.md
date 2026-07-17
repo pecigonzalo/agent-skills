@@ -15,26 +15,26 @@ Keep APIs interface-friendly: accept interfaces, return concrete types, avoid po
 
 ### Slice & Map Idioms
 
-**`append` always returns a new slice header — always assign the result:**
+**`append` always returns a new slice header: always assign the result:**
 
 ```go
 // Correct
 items = append(items, newItem)
 items = append(items, other...)
 
-// Discards the result — may silently no-op when capacity grows
+// Discards the result: may silently no-op when capacity grows
 append(items, newItem)
 ```
 
-**Nil vs empty slice** — prefer `var s []T` (nil slice) over `s := []T{}` (non-nil empty). Both have `len == 0` and work with `append`, `range`, etc. JSON exception: nil encodes to `null`; `[]T{}` encodes to `[]`.
+**Nil vs empty slice**: prefer `var s []T` (nil slice) over `s := []T{}` (non-nil empty). Both have `len == 0` and work with `append`, `range`, etc. JSON exception: nil encodes to `null`; `[]T{}` encodes to `[]`.
 
 When designing APIs, **do not distinguish** between a nil and a non-nil zero-length slice.
 
-**Map comma-ok — always use the two-value form to detect presence:** `if v, ok := m[key]; ok { ... }`
+**Map comma-ok: always use the two-value form to detect presence:** `if v, ok := m[key]; ok { ... }`
 
-**Set representation** — prefer `map[T]struct{}` over `map[T]bool`; zero-size values consume no heap.
+**Set representation**: prefer `map[T]struct{}` over `map[T]bool`; zero-size values consume no heap.
 
-**Copy slices and maps at API boundaries** — slices and maps hold pointers to underlying data; storing or returning them without copying leaks internal state. For Go 1.21+, prefer `slices.Clone` and `maps.Clone`:
+**Copy slices and maps at API boundaries**: slices and maps hold pointers to underlying data; storing or returning them without copying leaks internal state. For Go 1.21+, prefer `slices.Clone` and `maps.Clone`:
 
 ```go
 // Bad: caller can mutate d.trips
@@ -82,7 +82,7 @@ const (
 
 ### Time: Use `time.Time` and `time.Duration`
 
-Represent instants with `time.Time` and durations with `time.Duration` — never raw `int` or `int64`. If a JSON/YAML schema forces a raw integer, include the unit in the field name (`IntervalMillis`, not `Interval`).
+Represent instants with `time.Time` and durations with `time.Duration`: never raw `int` or `int64`. If a JSON/YAML schema forces a raw integer, include the unit in the field name (`IntervalMillis`, not `Interval`).
 
 ### Marshaling: Always Use Explicit Field Tags
 
@@ -90,11 +90,11 @@ Any struct serialized to JSON, YAML, TOML, etc. must carry explicit field tags. 
 
 ### Avoid Mutable Package-Level Globals
 
-Mutable globals make code hard to test and reason about. Prefer **dependency injection** — pass dependencies as struct fields or constructor arguments. Read-only package-level vars (sentinel errors, compiled regexps, `sync.Once`-initialized values) are fine.
+Mutable globals make code hard to test and reason about. Prefer **dependency injection**: pass dependencies as struct fields or constructor arguments. Read-only package-level vars (sentinel errors, compiled regexps, `sync.Once`-initialized values) are fine.
 
 ### Cryptographically Secure Randomness
 
-Never use `math/rand` (or `math/rand/v2`) for keys, tokens, session IDs, or security-sensitive values. Use `crypto/rand` instead — on Go 1.22+, `rand.Text()` returns a base32-encoded random string.
+Never use `math/rand` (or `math/rand/v2`) for keys, tokens, session IDs, or security-sensitive values. Use `crypto/rand` instead: on Go 1.22+, `rand.Text()` returns a base32-encoded random string.
 
 > **Security**: See `standards-security` for broader guidance.
 
@@ -141,13 +141,13 @@ Use a **pointer receiver** when the method mutates the receiver, the struct cont
 
 **Consistency rule**: if any method needs a pointer receiver, use pointer receivers for _all_ methods on that type.
 
-**Pitfall**: values in maps are not addressable — store `map[K]*T` if the type needs pointer receivers.
+**Pitfall**: values in maps are not addressable: store `map[K]*T` if the type needs pointer receivers.
 
 > **When in doubt, use a pointer receiver.**
 
 ### Interface Satisfaction Check
 
-Use a blank-identifier compile-time assertion to ensure a type implements an interface — catches drift without a runtime test:
+Use a blank-identifier compile-time assertion to ensure a type implements an interface: catches drift without a runtime test:
 
 ```go
 var _ io.Reader   = (*MyReader)(nil)
@@ -157,7 +157,7 @@ var _ http.Handler = (*MyHandler)(nil)
 
 ### Type Assertions & Type Switches
 
-Always use the two-value form (`v, ok := x.(T)`) to avoid panics. Use type switches for exhaustive branching. The single-value form panics on mismatch — avoid in production code. Type switch cases can match both concrete and interface types.
+Always use the two-value form (`v, ok := x.(T)`) to avoid panics. Use type switches for exhaustive branching. The single-value form panics on mismatch: avoid in production code. Type switch cases can match both concrete and interface types.
 
 ### io.Reader / io.Writer Composition
 
@@ -172,9 +172,9 @@ Go favors **composition over inheritance**. Embedding promotes methods to the ou
 - Access embedded fields using the unqualified type name as the field name.
 - Define the same method on the outer type to override/intercept.
 - An outer field/method always hides the same name from embedded types.
-- The receiver of a promoted method is the **inner** type, not the outer — no implicit `super`.
+- The receiver of a promoted method is the **inner** type, not the outer: no implicit `super`.
 
-> **Caution — avoid embedding in exported structs**: embedding leaks the full API of the embedded type. Adding/removing methods on the embedded type becomes a breaking change. Prefer a **named private field + explicit forwarding methods** so you control the public surface. Embedding is fine for **unexported** structs and for interface composition.
+> **Caution: avoid embedding in exported structs**: embedding leaks the full API of the embedded type. Adding/removing methods on the embedded type becomes a breaking change. Prefer a **named private field + explicit forwarding methods** so you control the public surface. Embedding is fine for **unexported** structs and for interface composition.
 
 ### Go-specific pattern guidance
 

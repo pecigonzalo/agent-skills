@@ -61,11 +61,11 @@ describe('local link validation', () => {
   });
 });
 
-test('host-specific APIs require structured capability metadata', () => {
+test('host-specific APIs require compatibility', () => {
   const missing = parseFrontmatter(frontmatter('name: example\ndescription: Test skill.'), 'SKILL.md');
   expect(validateHostBoundaries('Task({})', missing, 'SKILL.md')).toEqual([
-    'SKILL.md: host-specific APIs require metadata.host-capabilities',
+    'SKILL.md: host-specific APIs require compatibility',
   ]);
-  const declared = parseFrontmatter(frontmatter('name: example\ndescription: Test skill.\nmetadata:\n  host-capabilities: Native task delegation'), 'SKILL.md');
+  const declared = parseFrontmatter(frontmatter('name: example\ndescription: Test skill.\ncompatibility: Requires native task delegation'), 'SKILL.md');
   expect(validateHostBoundaries('Task({})', declared, 'SKILL.md')).toEqual([]);
 });

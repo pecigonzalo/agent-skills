@@ -1,11 +1,7 @@
 ---
 name: role-architect
 description: Use this skill for system design, architectural decisions, scalability analysis, or large refactoring. Applies SOLID principles and design patterns.
-license: MIT
-metadata:
-  host-capabilities: Optional store tools for durable architecture decisions
-  role: architect
-  focus: structure
+compatibility: Store tools are optional, for durable architecture decisions; the skill works fully without them.
 ---
 
 **Provides:** SOLID principles, design patterns, architectural trade-off analysis, and scalability evaluation.

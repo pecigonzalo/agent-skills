@@ -1,11 +1,6 @@
 ---
 name: standards-shell
 description: Use this skill when writing or reviewing shell and Bash scripts, designing shell script architecture, or working on CI/CD pipeline scripts. Provides Google Shell Style Guide patterns, safety practices, and idiomatic Bash.
-license: MIT
-metadata:
-  role: standards
-  domain: shell
-  priority: high
 ---
 
 # Shell Standards
@@ -14,7 +9,7 @@ metadata:
 
 ## Quick Reference
 
-**Golden Rule**: Shell is for small utilities and simple wrappers — when in doubt, use a real language.
+**Golden Rule**: Shell is for small utilities and simple wrappers: when in doubt, use a real language.
 
 **Do** (✅):
 - Use `#!/bin/bash` as the shebang for executables
@@ -28,14 +23,14 @@ metadata:
 - Declare constants with `readonly`; exported vars with `declare -xr`
 
 **Don't** (❌):
-- Write scripts longer than ~100 lines — rewrite in Python/Go
-- Use `eval` — it obscures what gets set and can't be audited
-- Use `let`, `$[ … ]`, or `expr` for arithmetic — use `(( … ))`
-- Pipe into `while read` — use process substitution `< <(cmd)` or `readarray`
-- Use backticks — use `$(…)` instead
-- Use `$*` for passing arguments — use `"$@"`
+- Write scripts longer than ~100 lines: rewrite in Python/Go
+- Use `eval`: it obscures what gets set and can't be audited
+- Use `let`, `$[ … ]`, or `expr` for arithmetic: use `(( … ))`
+- Pipe into `while read`: use process substitution `< <(cmd)` or `readarray`
+- Use backticks: use `$(…)` instead
+- Use `$*` for passing arguments: use `"$@"`
 - Use SUID/SGID on shell scripts
-- Define aliases in scripts — use functions
+- Define aliases in scripts: use functions
 - Use `[ … ]` when `[[ … ]]` is available
 
 **Key tools:**
@@ -88,7 +83,7 @@ set -euo pipefail
 
 - **Executables**: `.sh` extension or no extension (no extension preferred when added to `PATH`)
 - **Libraries**: must have `.sh` extension and should not be executable
-- **Source filenames**: lowercase with underscores — `make_template.sh` or `maketemplate.sh` (not `make-template.sh`)
+- **Source filenames**: lowercase with underscores: `make_template.sh` or `maketemplate.sh` (not `make-template.sh`)
 
 ### SUID/SGID
 
@@ -151,7 +146,7 @@ del_thing() {
 
 ### Implementation Comments
 
-Comment tricky, non-obvious, or important parts of your code. Don't comment everything — only what isn't self-evident.
+Comment tricky, non-obvious, or important parts of your code. Don't comment everything: only what isn't self-evident.
 
 ### TODO Comments
 
@@ -165,7 +160,7 @@ Comment tricky, non-obvious, or important parts of your code. Don't comment ever
 
 ### Indentation
 
-- **2 spaces** — no tabs
+- **2 spaces**: no tabs
 - Blank lines between blocks improve readability
 - **Exception**: `<<-` here-documents may use tab indentation
 
@@ -189,10 +184,10 @@ long string."
 If a pipeline fits on one line, keep it on one line. Otherwise, split with `\` and one pipe per line (pipe on the newline):
 
 ```bash
-# Short — one line
+# Short: one line
 command1 | command2
 
-# Long — split per segment
+# Long: split per segment
 command1 \
   | command2 \
   | command3 \
@@ -322,14 +317,14 @@ readonly PATH_TO_FILES='/some/path'
 # Exported constant
 declare -xr ORACLE_SID='PROD'
 
-# Runtime constant — set readonly after assignment
+# Runtime constant: set readonly after assignment
 ZIP_VERSION="$(dpkg --status zip | sed -n 's/^Version: //p')"
 readonly ZIP_VERSION
 ```
 
 ### Use Local Variables
 
-Declare function-scoped variables with `local`. Keep declaration and assignment separate when the value comes from a command substitution — `local` does not propagate exit codes:
+Declare function-scoped variables with `local`. Keep declaration and assignment separate when the value comes from a command substitution: `local` does not propagate exit codes:
 
 ```bash
 my_func() {

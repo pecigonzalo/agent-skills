@@ -1,11 +1,6 @@
 ---
 name: standards-go-performance
 description: Use this skill when diagnosing Go performance issues, tuning garbage collection, reviewing performance, or working on allocation-sensitive code. Provides pprof and trace workflows, allocation control, GC tuning guardrails, and runtime metrics patterns.
-license: MIT
-metadata:
-  role: standards
-  domain: go-performance
-  priority: high
 ---
 
 # Go Performance Standards
@@ -53,14 +48,14 @@ go build -pgo=default.pgo ./cmd/myservice                           # PGO build
 
 ---
 
-## Pattern 1: Measure First — pprof Workflow
+## Pattern 1: Measure First: pprof Workflow
 
 Use pprof to locate real bottlenecks before touching any code.
 
 **When:** CPU hot paths, latency regressions, or unexplained memory growth.
 
 **How:**
-- Collect one targeted profile at a time — CPU *or* heap, not both simultaneously
+- Collect one targeted profile at a time: CPU *or* heap, not both simultaneously
 - Benchmark: `go test -cpuprofile cpu.out -bench BenchmarkFoo ./pkg`
 - Analyze interactively: `go tool pprof -http=:0 ./pkg.test cpu.out`
 - Focus on `top` (cumulative/flat), `list FunctionName`, and the flame graph
@@ -68,7 +63,7 @@ Use pprof to locate real bottlenecks before touching any code.
 - Record baseline and post-change numbers in the PR or commit message
 
 **Pitfalls:**
-- Optimizing based on code reading alone — the bottleneck is rarely where you expect
+- Optimizing based on code reading alone: the bottleneck is rarely where you expect
 - Collecting multiple profiles in a single run (timing interference skews results)
 - Treating micro-benchmark results as production truth (cache, data size, and concurrency differ)
 
@@ -92,7 +87,7 @@ import (
     "net/http"
 )
 
-// In main or server init — bind to loopback or internal network only
+// In main or server init: bind to loopback or internal network only
 go http.ListenAndServe("localhost:6060", nil)
 ```
 
@@ -137,8 +132,8 @@ func writeHeapProfile(path string) error {
 ```
 
 **Pitfalls:**
-- Exposing `/debug/pprof` on a public-facing port is a security risk — bind to loopback or a firewall-protected internal address only.
-- CPU and heap profiling simultaneously skews both — collect one at a time.
+- Exposing `/debug/pprof` on a public-facing port is a security risk: bind to loopback or a firewall-protected internal address only.
+- CPU and heap profiling simultaneously skews both: collect one at a time.
 - `runtime.GC()` before a heap snapshot forces a collection; do not call it in production hot paths.
 
 **Verify:** `curl -s http://localhost:6060/debug/pprof/` returns the index page; profiles download and open with `go tool pprof`.
@@ -181,10 +176,10 @@ Use these only when profiles show allocation pressure:
 - Avoid unnecessary pointers for small value-like types when mutation is not required.
 
 **Pitfalls:**
-- Adding `sync.Pool` before profiling shows allocation as the bottleneck — pool overhead is non-zero
+- Adding `sync.Pool` before profiling shows allocation as the bottleneck: pool overhead is non-zero
 - Sharing a pooled buffer across goroutines without external synchronization
 - `sync.Pool` entries are GC'd between benchmark iterations; reset state (`buf.Reset()`) before use
-- Hoisting `[]byte("const")` out of a loop only helps if the loop body runs frequently — verify with `benchmem`
+- Hoisting `[]byte("const")` out of a loop only helps if the loop body runs frequently: verify with `benchmem`
 
 **Verify:** `go test -bench . -benchmem` shows reduced `allocs/op`; heap profile (`-memprofile`) confirms fewer live objects.
 
@@ -199,7 +194,7 @@ Reduce lock contention and avoid unnecessary synchronization overhead.
 **How:**
 
 **Atomic operations for single-value counters:**
-Use `sync/atomic` typed operations (Go 1.19+) for simple shared scalars — faster than a mutex for non-compound operations:
+Use `sync/atomic` typed operations (Go 1.19+) for simple shared scalars: faster than a mutex for non-compound operations:
 
 ```go
 import "sync/atomic"
@@ -244,7 +239,7 @@ func (m *ShardedMap) Get(key string) (any, bool) {
 ```
 
 **Pitfalls:**
-- Reaching for atomics or sharding before the mutex profile confirms contention — premature complexity.
+- Reaching for atomics or sharding before the mutex profile confirms contention: premature complexity.
 - Sharding with a poor hash distributes unevenly; benchmark with a representative key distribution.
 - Compound atomic operations (e.g., check-then-set) require a mutex or `compare-and-swap` loop.
 
@@ -262,16 +257,16 @@ Keep small, short-lived values on the stack by understanding how the compiler de
 - Inspect compiler decisions: `go build -gcflags=all='-m' ./...`
 - Keep functions small to enable inlining (inlined callees don't need heap-allocated frames)
 - Avoid returning a pointer to a local when the caller doesn't need the address; pass by value for small structs
-- Interfaces cause escapes — avoid interface-boxing in loops
+- Interfaces cause escapes: avoid interface-boxing in loops
 
 ```bash
-# Sample output — look for "escapes to heap" on hot allocations
+# Sample output: look for "escapes to heap" on hot allocations
 go build -gcflags=all='-m -m' ./pkg 2>&1 | grep 'escapes to heap'
 ```
 
 **Pitfalls:**
 - Refactoring for stack placement without confirming the allocation is a measured bottleneck
-- Relying on specific escape decisions across Go versions — the compiler may change heuristics
+- Relying on specific escape decisions across Go versions: the compiler may change heuristics
 - Using `unsafe` to force stack allocation (undefined behavior, never do this)
 
 **Verify:** `-gcflags=-m` output no longer shows the target allocation escaping; `benchmem` `allocs/op` drops.
@@ -288,7 +283,7 @@ Structural code changes often yield larger gains than low-level micro-optimizati
 
 **Early returns and fast paths:**
 ```go
-// ✅ Skip work early — avoid expensive computation for common no-op cases
+// ✅ Skip work early: avoid expensive computation for common no-op cases
 func process(items []Item) {
     for _, item := range items {
         if !item.IsValid() {
@@ -327,7 +322,7 @@ func (p *Parser) Parse(data []byte) {
 
 Stream directly to writers instead of building an intermediate `[]byte`:
 ```go
-// ✅ Write directly — no intermediate allocation
+// ✅ Write directly: no intermediate allocation
 json.NewEncoder(w).Encode(value)
 
 // ❌ Allocates intermediate []byte
@@ -336,8 +331,8 @@ w.Write(b)
 ```
 
 **Pitfalls:**
-- Fast-path branches that are never exercised add dead code and maintenance burden — verify with coverage.
-- Batch sizes that are too large increase latency and memory pressure — benchmark with realistic data.
+- Fast-path branches that are never exercised add dead code and maintenance burden: verify with coverage.
+- Batch sizes that are too large increase latency and memory pressure: benchmark with realistic data.
 - Reusing `buf[:0]` is only safe when the caller does not retain a reference to the previous content.
 
 **Verify:** Benchmark shows improvement proportional to reduced calls or allocations; profile confirms the hot path moved.
@@ -359,7 +354,7 @@ Use the execution tracer to diagnose scheduler stalls, GC pauses, and goroutine 
 - For in-process tracing: use `runtime/trace` package with `trace.Start` / `trace.Stop`
 
 **Pitfalls:**
-- Using the tracer to find CPU hotspots — pprof is the right tool for that
+- Using the tracer to find CPU hotspots: pprof is the right tool for that
 - Long-running trace sessions produce large files that are slow to load
 - Interpreting trace without understanding the Go scheduler (M:N model; P = logical processor)
 
@@ -388,16 +383,16 @@ metrics.Read(samples)
 ```
 
 - Key signals to expose:
-  - `/gc/cycles/total:events` — GC frequency
-  - `/memory/classes/heap/objects:bytes` — live heap
-  - `/memory/classes/heap/released:bytes` — memory returned to OS
-  - `/sched/goroutines:goroutines` — goroutine count (leak detection)
-  - `/cpu/classes/gc/total:cpu-seconds` — GC CPU cost
+  - `/gc/cycles/total:events`: GC frequency
+  - `/memory/classes/heap/objects:bytes`: live heap
+  - `/memory/classes/heap/released:bytes`: memory returned to OS
+  - `/sched/goroutines:goroutines`: goroutine count (leak detection)
+  - `/cpu/classes/gc/total:cpu-seconds`: GC CPU cost
 - Wire to Prometheus or your metrics backend; see `standards-observability` for infrastructure patterns
 
 **Pitfalls:**
-- Monitoring only RSS/VSZ — these miss GC dynamics and can lag heap behavior
-- Ignoring `heap/released` — rising live heap with no release indicates growth
+- Monitoring only RSS/VSZ: these miss GC dynamics and can lag heap behavior
+- Ignoring `heap/released`: rising live heap with no release indicates growth
 - Not tracking GC CPU fraction separately; it can dominate application CPU silently
 
 **Verify:** Dashboards show stable trends under load; oncall runbook references these metrics and their alert thresholds.
@@ -406,7 +401,7 @@ metrics.Read(samples)
 
 ## Pattern 5b: Runtime Tuning
 
-Adjust Go runtime parameters when defaults are a measured bottleneck — not before.
+Adjust Go runtime parameters when defaults are a measured bottleneck: not before.
 
 **When:** CPU profiling shows scheduler overhead or goroutine stalls; or you need to tune memory behavior beyond `GOMEMLIMIT`.
 
@@ -417,9 +412,9 @@ Adjust Go runtime parameters when defaults are a measured bottleneck — not bef
 - Keep process-wide runtime knob changes in `main`, not libraries.
 
 **Pitfalls:**
-- `runtime.GOMAXPROCS` called in library code affects the entire process — leave it to the application's `main`.
-- `runtime.ReadMemStats` takes a STW snapshot — avoid calling it on hot paths or in tight loops.
-- `debug.SetGCPercent` changes are process-wide; calling it from multiple goroutines simultaneously can produce unexpected results if the intent is to temporarily change and restore the value — serialize such calls.
+- `runtime.GOMAXPROCS` called in library code affects the entire process: leave it to the application's `main`.
+- `runtime.ReadMemStats` takes a STW snapshot: avoid calling it on hot paths or in tight loops.
+- `debug.SetGCPercent` changes are process-wide; calling it from multiple goroutines simultaneously can produce unexpected results if the intent is to temporarily change and restore the value: serialize such calls.
 
 **Verify:** Trace shows reduced scheduler stalls or lower P-idle time; benchmark confirms throughput improvement.
 
@@ -451,9 +446,9 @@ gc 14 @12.345s 2%: 0.1+2.1+0.3 ms clock, 0.8+1.5/2.0/0.1+2.4 ms cpu, 512->512->2
   - Field 3 is GC CPU%; field 7 shows heap before→after→live; confirm pause times are acceptable.
 
 **Pitfalls:**
-- Setting `GOMEMLIMIT` too close to the container limit — the GC will thrash trying to stay under it
-- Setting `GOGC=off` in shared environments — unbounded heap growth will OOM neighbors
-- Tuning before measuring — `GOGC` and `GOMEMLIMIT` interact; always profile first
+- Setting `GOMEMLIMIT` too close to the container limit: the GC will thrash trying to stay under it
+- Setting `GOGC=off` in shared environments: unbounded heap growth will OOM neighbors
+- Tuning before measuring: `GOGC` and `GOMEMLIMIT` interact; always profile first
 
 **Verify:** `gctrace` shows acceptable pause times (<1 ms STW for most services) and GC CPU % drops; no OOM or thrashing under sustained load.
 

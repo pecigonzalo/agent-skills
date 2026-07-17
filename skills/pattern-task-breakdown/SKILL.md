@@ -1,11 +1,7 @@
 ---
 name: pattern-task-breakdown
 description: Use this skill when planning complex work, responding to requests for a detailed plan, or clarifying an uncertain approach. Decomposes work into sequential subtasks with dependencies and estimates.
-license: MIT
-metadata:
-  host-capabilities: Optional host-native subagent delegation and store tools
-  role: planner
-  focus: decomposition
+compatibility: Host-native subagent delegation and store tools are optional; the core breakdown process works fully without them.
 ---
 
 ## Quick Reference

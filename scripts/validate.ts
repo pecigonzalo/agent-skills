@@ -114,9 +114,9 @@ export async function validateLinks(content: string, skillRoot: string, path: st
 export function validateHostBoundaries(content: string, frontmatter: SkillFrontmatter, path: string): string[] {
   const usesHostApi = /Task\(\{|\b(?:storewrite|storeread|host\.mcp)\b/.test(content);
   if (!usesHostApi) return [];
-  const metadata = frontmatter.metadata as Record<string, unknown> | undefined;
-  if (typeof metadata?.['host-capabilities'] !== 'string' || metadata['host-capabilities'].trim() === '') {
-    return [`${path}: host-specific APIs require metadata.host-capabilities`];
+  const hasCompatibility = typeof frontmatter.compatibility === 'string' && frontmatter.compatibility.trim() !== '';
+  if (!hasCompatibility) {
+    return [`${path}: host-specific APIs require compatibility`];
   }
   return [];
 }

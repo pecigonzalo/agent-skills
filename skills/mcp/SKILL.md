@@ -1,9 +1,8 @@
 ---
 name: mcp
 description: Discover, configure, and call MCP (Model Context Protocol) servers. Use this when interacting with MCP tools or resources in Pi, inspecting schemas, authenticating servers, trying ad-hoc endpoints, or generating typed MCP clients and CLIs.
+compatibility: Designed for Pi's typescript/host.mcp bridge; mcporter CLI workflows also require Bun or Node.
 allowed-tools: TypeScript Bash(bunx mcporter:*) Bash(npx -y mcporter:*) Read Grep
-metadata:
-  host-capabilities: Pi typescript host.mcp bridge; optional mcporter CLI
 ---
 
 # MCP
