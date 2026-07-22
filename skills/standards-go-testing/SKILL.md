@@ -24,6 +24,7 @@ description: Use this skill when writing or reviewing Go tests, benchmarks, or f
 - Store expected output in `testdata/`; regenerate with `-update` flag
 - Write handwritten fakes over heavy mocking frameworks
 - Run `go test -race ./...` in CI
+- Use `testify/require` for preconditions that gate the rest of the test (errors, nils, setup results)
 
 **Don't** (❌):
 - Use `t.Fatal` in helpers without `t.Helper()` (failure points at helper, not caller)
@@ -32,7 +33,7 @@ description: Use this skill when writing or reviewing Go tests, benchmarks, or f
 - Use non-deterministic map iteration in golden-file output
 - Include setup/teardown in the timed loop of a benchmark
 - Start fuzzing targets that perform external I/O
-- Use assertion libraries (`testify/assert`, etc.): write plain comparisons instead
+- Use `testify/assert` right before code that depends on the checked value: it continues after failure, so a nil/zero value can panic on the next line and bury the real failure; use `require` there instead
 - Call `t.Fatal`/`t.FailNow` from goroutines: use `t.Error` and let the test continue
 - Match errors by string (`err.Error() == "..."`): use `errors.Is`/`errors.As`
 - Put complex conditional mock setup inside table tests: split into focused functions
@@ -64,13 +65,15 @@ Never call `t.Fatal`/`t.FailNow` from goroutines.
 
 ## Comparisons & Assertions
 
-**No assertion libraries.** Do not use `testify/assert`, `testify/require`, or similar. They fragment the developer experience and often produce unhelpful messages. Write plain `if got != want` comparisons.
+**testify is a reasonable default; prefer `require` over `assert`.** `require.NoError`, `require.NotNil`, etc. call `t.FailNow()` on failure, so nothing downstream in the test runs against a bad value — this is strictly safer than a hand-rolled `if err != nil { t.Fatal(...) }` and produces a clearer message for the same amount of code.
 
-**Use `cmp.Diff` for complex types** (structs, slices, maps). Always include the direction key `(-want +got)` in the error message so the reader knows which side is which.
+`assert` continues after a failed check instead of stopping the test. That's fine for a final round of independent checks where you want every mismatch reported at once, but risky right before code that depends on the value just checked: `assert.NotNil(t, x)` followed by `x.Field` can panic on a nil `x` and obscure the actual failure. Use `require` whenever the next line depends on the check; reserve `assert` for checks that don't gate anything after them. Plain `if got != want` comparisons are also fine and require no dependency at all.
+
+**Use `cmp.Diff` for complex types** (structs, slices, maps) where `require.Equal`/`assert.Equal` isn't precise enough: custom comparers, ignoring fields, or unexported fields. Always include the direction key `(-want +got)` in the error message so the reader knows which side is which.
 
 **Use `errors.Is`/`errors.As` for error semantics**: never compare error strings; they are not part of the API contract and break silently on wording changes.
 
-Use plain comparisons for primitives, `cmp.Diff` for complex values, and `errors.Is`/`errors.As` for error semantics.
+Use `require` for preconditions, `assert` (or plain comparisons) for independent trailing checks, `cmp.Diff` for complex values `Equal` can't express, and `errors.Is`/`errors.As` for error semantics.
 
 ---
 
@@ -287,7 +290,7 @@ Fuzz targets should be pure, seeded, and assert invariants (no panic, stable rou
 - [ ] `t.Cleanup` used for teardown (not bare defer in helpers)
 - [ ] Failure messages include function name + inputs + got + want; `t.Error` used for multiple assertions
 - [ ] `t.Fatal`/`t.FailNow` never called from goroutines
-- [ ] No assertion libraries: plain comparisons or `cmp.Diff` used; errors compared with `errors.Is`/`errors.As`
+- [ ] `require` (not `assert`) used for any check that gates later test logic; errors compared with `errors.Is`/`errors.As`
 - [ ] Fakes used instead of heavy mocking frameworks; fake types compile after interface changes
 - [ ] No `time.Sleep` in test assertions; clock injected for determinism
 - [ ] Benchmarks exclude setup from timed loop (`b.ResetTimer`); `b.Loop()` used on Go 1.24+
